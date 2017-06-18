@@ -1,7 +1,10 @@
 # webpack-starter-kit
 Basic Webpack starter kit for React
 
-The ENV has 3 Configs Development, Staging, Production
+# Getting started
+To get started you need to run `npm install`. Once you have installed all the node modules you can run one of 3 ENV.
+
+# The ENV has 3 Configs Development, Staging, Production
 
 1) To run development with HMR and Dev Server on 3030
 `npm run development`
