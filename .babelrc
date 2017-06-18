@@ -1,0 +1,34 @@
+{
+    "presets": [
+        ["es2015", {"modules": false}],
+        ["es2016"],
+        "react",
+        ["env", 
+            {
+                "modules": false,
+                "targets": {
+                    "browsers": ["last 2 versions", "safari 7"]
+                },
+                "production": {
+                    "presets": ["react-optimize"],
+                    "plugins": [
+                        ["transform-react-remove-prop-types", {
+                            "mode": "wrap",
+                            "ignoreFilenames": ["node_modules"]
+                        }]
+                    ]
+                },
+                "development": {
+                    "presets": ["react-optimize"],
+                    "plugins": [
+                        "react-hot-loader/babel"
+                    ]
+                }
+            }
+        ],   
+    ],
+    "plugins": [
+        "syntax-dynamic-import", 
+        "react-hot-loader/babel"
+    ],
+}
