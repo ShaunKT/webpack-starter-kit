@@ -4,20 +4,18 @@ import { AppContainer } from 'react-hot-loader';
 
 import AppRouter from './components/app';
 
-const root = document.getElementById('app');
 
-ReactDOM.render(
-  <AppContainer>
-    <AppRouter />
-  </AppContainer>
-  , root);
+const render = (Component) => {
+  ReactDOM.render(
+    <AppContainer>
+      <Component />
+    </AppContainer>,
+    document.getElementById('root'),
+  );
+};
+
+render(AppRouter);
 
 if (module.hot) {
-  module.hot.accept('./components/app', () => {
-    ReactDOM.render(
-      <AppContainer>
-        <AppRouter />
-      </AppContainer>
-    , root);
-  });
+  module.hot.accept('./components/app', () => { render(AppRouter); });
 }

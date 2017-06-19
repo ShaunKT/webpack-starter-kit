@@ -1,16 +1,16 @@
 import React from 'react';
-// import { browserHistory } from 'react-router-dom';
-import { Route, Router } from 'react-router';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Home from './content/home';
 import About from './content/about';
 
-
 const AppRouter = () => (
     <Router>
-        <Route path='/' component={Home} />
-        <Route path='/address' component={About} />
+        <Route exact path='/' component={Home} >
+            <Route path='/about' component={About} />
+        </Route>
     </Router>
 );
 
 export default AppRouter;
+
