@@ -14,14 +14,14 @@ const js_config = require('./webpack_configs/webpack.javascript.config');
 const styles_config = require('./webpack_configs/webpack.styles.config');
 const dev_server = require('./webpack_configs/webpack.server.config');
 
-// Directory Paths
+// === Directory Paths === //
 const PATHS = {
   app: path.resolve(__dirname, 'src'),
   build: path.resolve(__dirname, 'build'),
   styles: path.resolve(__dirname, 'src/styles'),
 };
 
-// Entry Config
+// === Entry Config === //
 const developmentEntryConfig = merge([
   {
     entry: {
@@ -43,7 +43,7 @@ const productionEntryConfig = merge([
   },
 ]);
 
-// Common Config
+// === Common Config === //
 const commonConfig = merge([
   {
     output: {
@@ -71,7 +71,7 @@ const commonConfig = merge([
       }),
     ],
   },
-  js_config.loadHTML(),
+  js_config.loadPUG(),
   js_config.loadJavaScript({ 
     include: PATHS.app,
     exclude: /node_modules/, 
@@ -81,13 +81,28 @@ const commonConfig = merge([
       name: './fonts/[name].[hash:8].[ext]',
     },
   }),
+]);
+
+// === Development Config === //
+const developmentConfig = merge([
   styles_config.lintCSS({ 
     include: PATHS.app
   }),
+  js_config.lintJavaScript({ 
+    include: PATHS.app 
+  }),
+  styles_config.loadCSS({
+    include: PATHS.styles,
+  }),
+  assets_config.loadImages(),
+  dev_server.devServer({
+    host: process.env.HOST,
+    port: 3030,
+  }),
 ]);
 
-// Production Config
-const productionConfig = merge([
+// === Staging Config === //
+const stagingConfig = merge([
   js_config.minifyJavaScript(),
   styles_config.minifyCSS({
     options: {
@@ -127,18 +142,41 @@ const productionConfig = merge([
   }),
 ]);
 
-// Development Config
-const developmentConfig = merge([
-  js_config.lintJavaScript({ 
-    include: PATHS.app 
+// === Production Config === //
+const productionConfig = merge([
+  js_config.minifyJavaScript(),
+  styles_config.minifyCSS({
+    options: {
+      discardComments: {
+        removeAll: true,
+      },
+      safe: true,
+    },
   }),
-  styles_config.loadCSS({
+  styles_config.extractCSS({
     include: PATHS.styles,
+    use: [
+      {
+        loader: 'css-loader',
+        options: {
+          modules: true,
+          importLoaders: 2,
+        },
+      },
+      styles_config.autoprefix(),
+      'sass-loader',
+    ],
   }),
-  assets_config.loadImages(),
-  dev_server.devServer({
-    host: process.env.HOST,
-    port: 3030,
+  styles_config.purifyCSS({
+    paths: glob.sync(
+      `${PATHS.app}/**/*.js`, { nodir: true }
+    ),
+  }),
+  assets_config.loadImages({
+    options: {
+      limit: 10000,
+      name: './images/[name].[hash:8].[ext]',
+    },
   }),
 ]);
 
@@ -149,6 +187,10 @@ module.exports = (env) => {
 
   if (env === 'production') {
     return merge(productionEntryConfig, commonConfig, productionConfig);
+  }
+
+  if (env === 'staging') {
+    return merge(productionEntryConfig, commonConfig, stagingConfig);
   }
 
   return merge(developmentEntryConfig, commonConfig, developmentConfig);

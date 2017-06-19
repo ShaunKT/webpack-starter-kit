@@ -1,9 +1,10 @@
 // Webpack modules
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // ======== HTML ======== //
 // Pug Loader
-exports.loadHTML = () => ({
+exports.loadPUG = () => ({
   module: {
     rules: [
       {
@@ -12,6 +13,14 @@ exports.loadHTML = () => ({
       },
     ],
   },
+});
+
+exports.loadHTML = ({ options }) => ({
+  plugins: [
+    new HtmlWebpackPlugin({
+      options
+    }),
+  ],
 });
 
 // ======== JAVASCRIPT ======== //

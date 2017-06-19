@@ -9,7 +9,13 @@
                 "targets": {
                     "browsers": ["last 2 versions", "safari 7"]
                 },
-                "production": {
+                "development": {
+                    "presets": ["react-optimize"],
+                    "plugins": [
+                        "react-hot-loader/babel"
+                    ]
+                },
+                "staging": {
                     "presets": ["react-optimize"],
                     "plugins": [
                         ["transform-react-remove-prop-types", {
@@ -18,10 +24,13 @@
                         }]
                     ]
                 },
-                "development": {
+                "production": {
                     "presets": ["react-optimize"],
                     "plugins": [
-                        "react-hot-loader/babel"
+                        ["transform-react-remove-prop-types", {
+                            "mode": "wrap",
+                            "ignoreFilenames": ["node_modules"]
+                        }]
                     ]
                 }
             }

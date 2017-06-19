@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "development": "webpack-dev-server --env development",
+    "staging": "rimraf build && webpack --env staging",
     "production": "rimraf build && webpack --env production",
     "lint:js": "eslint src/ webpack.*.js --cache"
   },
