@@ -10,13 +10,11 @@
                     "browsers": ["last 2 versions", "safari 7"]
                 },
                 "development": {
-                    "presets": ["react-optimize"],
                     "plugins": [
                         "react-hot-loader/babel"
                     ]
                 },
                 "staging": {
-                    "presets": ["react-optimize"],
                     "plugins": [
                         ["transform-react-remove-prop-types", {
                             "mode": "wrap",
@@ -25,7 +23,6 @@
                     ]
                 },
                 "production": {
-                    "presets": ["react-optimize"],
                     "plugins": [
                         ["transform-react-remove-prop-types", {
                             "mode": "wrap",

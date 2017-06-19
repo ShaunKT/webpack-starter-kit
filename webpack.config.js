@@ -29,8 +29,11 @@ const developmentEntryConfig = merge([
         'react-hot-loader/patch',
         'webpack-dev-server/client?http://localhost:3030',
         'webpack/hot/only-dev-server',
-        path.resolve(__dirname, 'src'),
+        path.join(__dirname, 'src')
       ],
+    },
+    output: {
+      publicPath: '/'
     },
   },
 ]);
@@ -39,6 +42,9 @@ const productionEntryConfig = merge([
   {
     entry: {
       app: path.resolve(__dirname, 'src'),
+    },
+    output: {
+      publicPath: './'
     },
   },
 ]);
@@ -76,6 +82,7 @@ const commonConfig = merge([
     include: PATHS.app,
     exclude: /node_modules/, 
   }),
+  // assets_config.imageFileLoader(),
   assets_config.loadFonts({
     options: {
       name: './fonts/[name].[hash:8].[ext]',
@@ -86,7 +93,7 @@ const commonConfig = merge([
 // === Development Config === //
 const developmentConfig = merge([
   styles_config.lintCSS({ 
-    include: PATHS.app
+    include: PATHS.styles
   }),
   js_config.lintJavaScript({ 
     include: PATHS.app 
