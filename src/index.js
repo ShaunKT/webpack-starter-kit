@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
-import AppRouter from './components/app';
+import AppRouter from './routes/appRouter';
 
 
 const render = (Component) => {
@@ -17,5 +17,7 @@ const render = (Component) => {
 render(AppRouter);
 
 if (module.hot) {
-  module.hot.accept('./components/app', () => { render(AppRouter); });
+  module.hot.accept(
+    './routes/appRouter', () => { render(AppRouter); },
+  );
 }

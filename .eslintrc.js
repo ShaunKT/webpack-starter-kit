@@ -5,12 +5,14 @@ module.exports = {
         "node": true
     },
     extends: ['airbnb-base', 'plugin:react/recommended'],
+    parser: "babel-eslint",
     parserOptions: {
         sourceType: 'module',
         allowImportExportEverywhere: true,
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true,
-            "jsx": true
+            "jsx": true,
+            "modules": true,
         },
         "sourceType": "module"
     },
