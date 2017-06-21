@@ -85,3 +85,80 @@ Once you have completed the setup run one of the 4 webpack.configs ENV's (Develo
 4) **Server Side Rendering** builds files for server rendering.
 
   `npm run ssr`
+  
+  
+
+## Folder Structure
+
+    
+    
+    |-- package.json
+    |-- src
+    |   |-- index.js  
+    |   |-- app-client.js  
+    |   |-- app-server.js
+    |   |-- actions
+    |   |  |-- user.js
+    |   |  |-- login.js
+    |   |  |-- settings.js
+    |   |
+    |   |-- containers
+    |   |  |-- home.js
+    |   |  |-- Login.js
+    |   |  |-- dashbourd.js
+    |   |
+    |   |-- components
+    |   |  |-- header.js
+    |   |  |-- navigation.js
+    |   |  |-- footer.js
+    |   |
+    |   |-- routes
+    |   |  |-- routes.js
+    |   |  |-- asyncRoutes.js
+    |   |  |-- syncRoutes.js
+    |   |  |-- libs
+    |   |  |   |-- asyncComponent.js
+    |   |
+    |   |-- reducers
+    |   |  |-- user.js
+    |   |  |-- login.js
+    |   |  |-- settings.js
+    |   |
+    |   |-- stores
+    |   |  |-- user.js
+    |   |  |-- login.js
+    |   |  |-- settings.js   
+    |   |
+    |   |-- images
+    |   |  |-- img.png
+    |   |  |-- img.jpg
+    |   |  |-- img.gif
+    |   |  |-- favicon.ico
+    |   |
+    |   |-- styles
+    |   |  |-- main.scss
+    |   |  |-- containers
+    |   |  |   |-- home.js
+    |   |  |   |-- Login.js
+    |   |  |   |-- dashbourd.js
+    |   |  |-- components
+    |   |  |   |-- header.js
+    |   |  |   |-- navigation.js
+    |   |  |   |-- footer.js
+    |
+    |-- server
+    |   |-- server.js
+    |
+    |-- webpack.config.js 
+    |-- webpack_env_configs 
+    |   |-- webpack.development.config.js
+    |   |-- webpack.ssr.config.js
+    |   |-- webpack.production.config.js   
+    |
+    |-- .babelrc
+    |-- .gitignore 
+    |-- .eslintrc.js
+    |-- stylelint.config.js 
+    |-- postcss.config.js
+    
+
