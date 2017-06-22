@@ -1,25 +1,24 @@
 :global {
   body {
     background: cornsilk;
-    background-image: url('../images/image_bg.jpg');
+    background-image: url('../images/image-placeholder.jpg');
     background-repeat: no-repeat;
     background-position: center;
-
     display: flex;
 
     div {
-        color: grey;
+      color: grey;
     }
   }
 
-  .class-btn{
-      background: blue;
-      height: 100px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      align-content: center;
+  .class-btn {
+    background: blue;
+    height: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
   }
 
   .divBackgroundColor {

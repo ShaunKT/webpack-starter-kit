@@ -10,15 +10,15 @@ exports.loadImages = ({ include, exclude, options } = {}) => ({
         exclude,
 
         use: [
-          'image-webpack-loader',
+          "image-webpack-loader",
           {
-            loader: 'url-loader',
-            options,
-          },
-        ],
-      },
-    ],
-  },
+            loader: "url-loader",
+            options
+          }
+        ]
+      }
+    ]
+  }
 });
 
 // Font loaders
@@ -31,10 +31,10 @@ exports.loadFonts = ({ include, exclude, options } = {}) => ({
         exclude,
 
         use: {
-          loader: 'file-loader',
-          options,
-        },
-      },
-    ],
-  },
+          loader: "file-loader",
+          options
+        }
+      }
+    ]
+  }
 });

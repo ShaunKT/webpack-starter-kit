@@ -7,11 +7,8 @@
   "main": "index.js",
   "scripts": {
     "development": "webpack-dev-server --env development",
-    "staging": "rimraf build && webpack --env staging",
     "production": "rimraf build && webpack --env production",
-    "production:w": "rimraf build && NODE_ENV=production webpack --config ./webpack_configs/webpack.production.config.js --progress --profile --colors",
-    "ssr": "webpack --config ./webpack_configs/webpack.ssr.config.js --env ssr",
-    "ssr:ssr": "webpack --env production",
+    "ssr": "webpack --env production",
     "lint:js": "eslint src/ webpack.*.js --cache"
   },
   "eslintConfig": {
@@ -64,7 +61,7 @@
     "stats-webpack-plugin": "^0.6.1",
     "style-loader": "^0.18.2",
     "stylelint-config-standard": "^16.0.0",
-    "stylelint-webpack-plugin": "^0.7.0",
+    "stylelint-webpack-plugin": "^0.7.1",
     "uglifyjs-webpack-plugin": "^0.4.3",
     "url-loader": "^0.5.9",
     "webpack": "^2.6.1",

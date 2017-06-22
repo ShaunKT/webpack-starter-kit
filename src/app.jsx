@@ -4,10 +4,12 @@ import Helmet from "react-helmet";
 
 import Menu from "./components/navigation.jsx";
 
+import Styles from './styles/index.scss';
+
 class Homepage extends Component {
   render() {
     return (
-      <div>
+      <div className={Styles.divBackgroundColor}>
         <Helmet title="Welcome to our Homepage" />
         <Menu />
         <h1>Homepage</h1>
