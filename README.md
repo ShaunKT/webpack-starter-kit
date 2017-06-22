@@ -51,13 +51,8 @@ Setting up the linter packages helps keep the css/sass styles and javascript con
   - setup atom = `apm install linter-eslint`
   
 
-  `npm install stylelint`
-  
-  `npm install stylelint-scss`
-  
-  `npm install stylelint-selector-bem-pattern`
-  
-  
+  `npm i eslint-config-airbnb-base`
+ 
 
 
 ## Webpack 
