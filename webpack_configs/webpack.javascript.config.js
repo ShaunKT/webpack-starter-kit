@@ -1,4 +1,5 @@
 // Webpack modules
+const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 // ======== HTML ======== //
@@ -21,7 +22,7 @@ exports.lintJavaScript = ({ include, exclude, options }) => ({
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         include,
         exclude,
         enforce: 'pre',
@@ -53,6 +54,21 @@ exports.loadJavaScript = ({ include, exclude }) => ({
 // Minifying JavaScript
 exports.minifyJavaScript = () => ({
   plugins: [
-    new UglifyJSPlugin(),
+    new webpack.DefinePlugin({
+      'process.env':{
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin(),
   ],
 });
+
+// Minifying JavaScript
+exports.moduleReplacement = ({ fileOptions }) => ({
+  plugins: [
+    new webpack.NormalModuleReplacementPlugin(
+      fileOptions
+    ),
+  ],
+});
+

@@ -1,12 +1,12 @@
 const path = require('path');
 const merge = require('webpack-merge');
 
-const js_config = require('./webpack_configs/webpack.javascript.config');
+const js_config = require('./webpack.javascript.config');
 const HappyPack = require('happypack');
 
 const PATHS = {
-  build: path.join(__dirname, 'static'),
-  ssr: path.join(__dirname, './src', './ssr.js'),
+  build: path.join(__dirname, '../build/static'),
+  ssr: path.join(__dirname, '../src', './ssr.js'),
 };
 
 module.exports = merge([

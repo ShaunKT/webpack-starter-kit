@@ -18,9 +18,7 @@ exports.lintCSS = ({ include, exclude }) => ({
 
         loader: 'postcss-loader',
         options: {
-          plugins: () => ([
-            require('stylelint')(),
-          ]),
+          plugins: () => [require('stylelint')()],
         },
       },
     ],
@@ -56,17 +54,13 @@ exports.loadCSS = ({ include, exclude } = {}) => ({
 exports.autoprefix = () => ({
   loader: 'postcss-loader',
   options: {
-    plugins: () => ([
-      require('autoprefixer')(),
-    ]),
+    plugins: () => [require('autoprefixer')()],
   },
 });
 
 // Remove unused css
 exports.purifyCSS = ({ paths }) => ({
-  plugins: [
-    new PurifyCSSPlugin({ paths }),
-  ],
+  plugins: [new PurifyCSSPlugin({ paths })],
 });
 
 // Minifying CSS
@@ -101,8 +95,6 @@ exports.extractCSS = ({ include, exclude, use }) => {
         },
       ],
     },
-    plugins: [
-      plugin,
-    ],
+    plugins: [plugin],
   };
 };

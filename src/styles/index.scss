@@ -1,54 +1,56 @@
-body {
-  background: cornsilk;
-  background-image: url('../images/image_bg.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
+:global {
+  body {
+    background: cornsilk;
+    background-image: url('../images/image_bg.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
 
-  display: flex;
-
-  div {
-      color: grey;
-  }
-}
-
-.class-btn{
-    background: blue;
-    height: 100px;
-    width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
-}
 
-.asas {
-  background: blue;
-}
+    div {
+        color: grey;
+    }
+  }
 
-.kajsfsdsgfdndas {
-  background: blue;
-}
+  .class-btn{
+      background: blue;
+      height: 100px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+  }
 
-.kajdfsfgsdafsndas {
-  background: blue;
-}
+  .divBackgroundColor {
+    background: blue;
+  }
 
-.kaqweffqjsndas {
-  background: blue;
-}
+  .kajsfsdsgfdndas {
+    background: blue;
+  }
 
-.kabvzcjsndas {
-  background: blue;
-}
+  .kajdfsfgsdafsndas {
+    background: blue;
+  }
 
-.kajsndadafknackldas {
-  background: blue;
-}
+  .kaqweffqjsndas {
+    background: blue;
+  }
 
-.kajsnmxksdndas {
-  background: blue;
-}
+  .kabvzcjsndas {
+    background: blue;
+  }
 
-.zmcvmsd {
-  background: blue;
+  .kajsndadafknackldas {
+    background: blue;
+  }
+
+  .kajsnmxksdndas {
+    background: blue;
+  }
+
+  .zmcvmsd {
+    background: blue;
+  }
 }
