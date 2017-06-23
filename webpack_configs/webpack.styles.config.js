@@ -1,8 +1,8 @@
 // Webpack modules
-const cssnano = require('cssnano');
-const PurifyCSSPlugin = require('purifycss-webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const cssnano = require("cssnano");
+const PurifyCSSPlugin = require("purifycss-webpack");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 // ======== STYLES ======== //
 
@@ -14,15 +14,15 @@ exports.lintCSS = ({ include, exclude }) => ({
         test: /\.css$/,
         include,
         exclude,
-        enforce: 'pre',
+        enforce: "pre",
 
-        loader: 'postcss-loader',
+        loader: "postcss-loader",
         options: {
-          plugins: () => [require('stylelint')()],
-        },
-      },
-    ],
-  },
+          plugins: () => [require("stylelint")()]
+        }
+      }
+    ]
+  }
 });
 
 // CSS Loader
@@ -35,32 +35,32 @@ exports.loadCSS = ({ include, exclude } = {}) => ({
         exclude,
 
         use: [
-          'style-loader',
+          "style-loader",
           {
-            loader: 'css-loader',
+            loader: "css-loader",
             options: {
               modules: true,
-              importLoaders: 2,
-            },
+              importLoaders: 2
+            }
           },
-          'sass-loader',
-        ],
-      },
-    ],
-  },
+          "sass-loader"
+        ]
+      }
+    ]
+  }
 });
 
 // CSS autoprefix
 exports.autoprefix = () => ({
-  loader: 'postcss-loader',
+  loader: "postcss-loader",
   options: {
-    plugins: () => [require('autoprefixer')()],
-  },
+    plugins: () => [require("autoprefixer")()]
+  }
 });
 
 // Remove unused css
 exports.purifyCSS = ({ paths }) => ({
-  plugins: [new PurifyCSSPlugin({ paths })],
+  plugins: [new PurifyCSSPlugin({ paths })]
 });
 
 // Minifying CSS
@@ -69,15 +69,15 @@ exports.minifyCSS = ({ options }) => ({
     new OptimizeCSSAssetsPlugin({
       cssProcessor: cssnano,
       cssProcessorOptions: options,
-      canPrint: false,
-    }),
-  ],
+      canPrint: false
+    })
+  ]
 });
 
 // Create an external CSS file
 exports.extractCSS = ({ include, exclude, use }) => {
   const plugin = new ExtractTextPlugin({
-    filename: '[name].[contenthash:8].css',
+    filename: "[name].[contenthash:8].css"
   });
 
   return {
@@ -89,12 +89,12 @@ exports.extractCSS = ({ include, exclude, use }) => {
           exclude,
 
           use: plugin.extract({
-            fallback: 'style-loader',
-            use,
-          }),
-        },
-      ],
+            fallback: "style-loader",
+            use
+          })
+        }
+      ]
     },
-    plugins: [plugin],
+    plugins: [plugin]
   };
 };

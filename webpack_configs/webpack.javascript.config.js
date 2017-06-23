@@ -1,6 +1,6 @@
 // Webpack modules
-const webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const webpack = require("webpack");
+const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
 
 // ======== HTML ======== //
 // Pug Loader
@@ -9,10 +9,10 @@ exports.loadPUG = () => ({
     rules: [
       {
         test: /\.pug$/,
-        loaders: ['html-loader', 'pug-html-loader'],
-      },
-    ],
-  },
+        loaders: ["html-loader", "pug-html-loader"]
+      }
+    ]
+  }
 });
 
 // ======== JAVASCRIPT ======== //
@@ -25,15 +25,15 @@ exports.lintJavaScript = ({ include, exclude, options }) => ({
         test: /\.(js|jsx)$/,
         include,
         exclude,
-        enforce: 'pre',
-        loader: 'eslint-loader',
-        options,
-      },
-    ],
-  },
+        enforce: "pre",
+        loader: "eslint-loader",
+        options
+      }
+    ]
+  }
 });
 
-// Babel 
+// Babel
 exports.loadJavaScript = ({ include, exclude }) => ({
   module: {
     rules: [
@@ -42,33 +42,28 @@ exports.loadJavaScript = ({ include, exclude }) => ({
         include,
         exclude,
 
-        loader: 'happypack/loader',
+        loader: "happypack/loader",
         options: {
-          cacheDirectory: true,
-        },
-      },
-    ],
-  },
+          cacheDirectory: true
+        }
+      }
+    ]
+  }
 });
 
 // Minifying JavaScript
 exports.minifyJavaScript = () => ({
   plugins: [
     new webpack.DefinePlugin({
-      'process.env':{
-        'NODE_ENV': JSON.stringify('production')
+      "process.env": {
+        NODE_ENV: JSON.stringify("production")
       }
     }),
-    new webpack.optimize.UglifyJsPlugin(),
-  ],
+    new webpack.optimize.UglifyJsPlugin()
+  ]
 });
 
 // Minifying JavaScript
 exports.moduleReplacement = ({ fileOptions }) => ({
-  plugins: [
-    new webpack.NormalModuleReplacementPlugin(
-      fileOptions
-    ),
-  ],
+  plugins: [new webpack.NormalModuleReplacementPlugin(fileOptions)]
 });
-

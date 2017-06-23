@@ -22,7 +22,7 @@ exports.ssrConfig = () => ({
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.js?x$/,
         exclude: /(node_modules\/)/,
         use: [
           {
@@ -31,7 +31,7 @@ exports.ssrConfig = () => ({
         ]
       },
       {
-        test: /\.scss$/,
+        test: /\.s?css$/,
         use: ExtractTextPlugin.extract({
           fallback: "isomorphic-style-loader",
           use: [
@@ -49,6 +49,10 @@ exports.ssrConfig = () => ({
             }
           ]
         })
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: ["image-webpack-loader", "url-loader"]
       }
     ]
   },

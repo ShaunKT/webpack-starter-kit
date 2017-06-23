@@ -17,7 +17,8 @@ exports.developmentConfig = () => ({
   },
   output: {
     path: path.join(__dirname, "../", "dist/"),
-    filename: "[name].js"
+    filename: "[name].js",
+    publicPath: "/assets/"
   },
   resolve: {
     extensions: [".js", ".jsx"]
@@ -29,7 +30,7 @@ exports.developmentConfig = () => ({
         loaders: ["html-loader", "pug-html-loader"]
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.js?x$/,
         exclude: /(node_modules\/)/,
         use: [
           {

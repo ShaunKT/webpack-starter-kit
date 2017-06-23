@@ -15,21 +15,19 @@
 // const styles_config = require('./webpack_configs/webpack.styles.config');
 // const dev_server = require('./webpack_configs/webpack.server.config');
 // const ssr = require('./webpack_configs/webpack.ssr');
-const ssr = require('./webpack_configs/webpack.ssr.config');
-const development = require('./webpack_configs/webpack.development.config');
-
-// === Directory Paths === //
-// const PATHS = {
-//   app: path.resolve(__dirname, 'src'),
-//   build: path.resolve(__dirname, 'build'),
-//   styles: path.resolve(__dirname, 'src/styles'),
-// };
+const ssr = require("./webpack_configs/webpack.ssr.config");
+const development = require("./webpack_configs/webpack.development.config");
+const production = require("./webpack_configs/webpack.production.config");
 
 // Webpack Config
 module.exports = env => {
   process.env.BABEL_ENV = env;
 
-  if (env === 'production') {
+  if (env === "production") {
+    return production.productionConfig();
+  }
+
+  if (env === "ssr") {
     return ssr.ssrConfig();
   }
 
