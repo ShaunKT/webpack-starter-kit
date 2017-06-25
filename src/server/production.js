@@ -18,7 +18,6 @@ const ClientStatsPath = path.join(
   '../',
   '../',
   'dist/',
-  'static/',
   'stats.json',
 );
 const Stats = require(ClientStatsPath);

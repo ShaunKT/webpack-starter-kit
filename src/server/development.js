@@ -1,30 +1,22 @@
 const express = require('express');
 const path = require('path');
-const webpack = require('webpack');
-
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const webpackHotServerMiddleware = require('webpack-hot-server-middleware');
-
-const config = require('../../webpack_configs/webpack.development.config');
-const compiler = webpack(config);
-
 const app = express();
-const PORT = process.env.PORT || 3030;
+const PORT = process.env.PORT || 7070;
 
-app.use(
-  webpackDevMiddleware(compiler, {
-    publicPath: '/static/',
-  }),
-);
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "../views"));
 
-app.use(
-  webpackHotMiddleware(
-    compiler.compilers.find(compiler => compiler.name === 'client'),
-  ),
-);
+app.use("static", express.static(path.join(__dirname, "./")));
 
-app.use(webpackHotServerMiddleware(compiler));
+
+
+
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
 
 app.listen(PORT);
 console.log(`Listerning on http://localhost:${PORT}`);

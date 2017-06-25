@@ -78,6 +78,7 @@
     "babel-register": "^6.24.1",
     "import-export": "^1.0.1",
     "prop-types": "^15.5.10",
+    "pug": "^2.0.0-rc.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-helmet": "^5.1.3",

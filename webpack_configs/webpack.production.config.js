@@ -9,6 +9,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const StatsPlugin = require("stats-webpack-plugin");
 
 const entryPoint = path.resolve(__dirname, "../src/");
 const stylesEntryPoint = path.resolve(__dirname, "../src/styles");
@@ -20,23 +21,22 @@ exports.productionConfig = () => ({
   output: {
     path: path.join(__dirname, "../dist/"),
     filename: "client.js",
-    publicPath: "/assets/"
+    publicPath: "./"
   },
   resolve: {
     extensions: [".js", ".jsx"]
   },
-  devtool: "source-map",
   module: {
     rules: [
       {
         test: /\.(pug|html)$/,
-        loaders: ["html-loader", "pug-html-loader"]
+        use: ["html-loader", "pug-html-loader"]
       },
       {
         test: /\.js?x$/,
         include: entryPoint,
         exclude: /(node_modules\/)/,
-        loader: "happypack/loader"
+        use: "happypack/loader"
       },
       {
         test: /\.s?css$/,
@@ -112,6 +112,13 @@ exports.productionConfig = () => ({
     new ExtractTextPlugin({
       filename: "styles/[name].[contenthash:8].css"
     }),
-    new webpack.optimize.OccurrenceOrderPlugin()
-  ]
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new StatsPlugin("stats.json", {
+      chunkModules: true,
+      modules: true,
+      chunks: true,
+      exclude: [/node_modules[\\/]react/]
+    })
+  ],
+  devtool: "source-map"
 });

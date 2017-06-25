@@ -9,13 +9,7 @@ module.exports = {
     "declaration-colon-space-before": "never",
     "block-opening-brace-space-before": "always",
     "declaration-block-single-line-max-declarations": 1,
-    "rule-nested-empty-line-before": [
-      "always",
-      {
-        ignore: ["after-comment"]
-      }
-    ],
-    "rule-non-nested-empty-line-before": [
+    "rule-empty-line-before": [
       "always",
       {
         ignore: ["after-comment"]
@@ -87,7 +81,6 @@ module.exports = {
     "color-hex-case": "lower",
     "color-hex-length": "long",
     "color-no-invalid-hex": true,
-    "no-indistinguishable-colors": true,
 
     // strings
     "string-quotes": "single",
@@ -117,13 +110,6 @@ module.exports = {
 
     // Declaration blocks
     "declaration-block-no-duplicate-properties": true,
-
-    // More on this one here:
-    // http://stylelint.io/user-guide/rules/declaration-block-no-ignored-properties/
-    "declaration-block-no-ignored-properties": true,
-
-    // Require a reason before or after a stylelint disable
-    "stylelint-disable-reason": "always-after",
 
     // Prevents adding unnecesary Specificity or complicated sass stuff
     "scss/selector-no-redundant-nesting-selector": true
