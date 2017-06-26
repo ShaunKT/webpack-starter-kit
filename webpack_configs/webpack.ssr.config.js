@@ -21,6 +21,10 @@ exports.ssrConfig = () => ({
   module: {
     rules: [
       {
+        test: /\.(pug|html)$/,
+        use: ["html-loader", "pug-html-loader"]
+      },
+      {
         test: /\.js?x$/,
         include: entryPoint,
         exclude: /(node_modules\/)/,
@@ -30,7 +34,7 @@ exports.ssrConfig = () => ({
         test: /\.s?css$/,
         include: stylesEntryPoint,
         use: [
-          "isomorphic-style-loader",
+          "style-loader",
           {
             loader: "css-loader",
             options: {

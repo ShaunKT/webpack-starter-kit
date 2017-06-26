@@ -1,14 +1,3 @@
-// doctype html
-// html(lang="en")
-//   head
-//     title Campus Connect
-//     meta(charset="UTF-8")/
-//     meta(name="viewport" content="width=device-width, initial-scale=1")/
-
-//   body
-//     main#root#{markup}
-
-
 export default ({ markup, helmet }) => {
   return `<!doctype html>
 <html ${helmet.htmlAttributes.toString()}>
@@ -16,6 +5,7 @@ export default ({ markup, helmet }) => {
 	${helmet.title.toString()}
 	${helmet.meta.toString()}
 	${helmet.link.toString()}
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body ${helmet.bodyAttributes.toString()}>
 	<div id="root">${markup}</div>
@@ -23,5 +13,3 @@ export default ({ markup, helmet }) => {
 </body>
 </html>`;
 };
-
-

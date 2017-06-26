@@ -1,15 +1,13 @@
-import React, {Component} from "react";
-import {Switch, Route} from "react-router-dom";
+import React, { Component } from "react";
+import { Switch, Route } from "react-router-dom";
 import Helmet from "react-helmet";
 
 import Menu from "./components/navigation.jsx";
 
-import Styles from './styles/index.scss';
-
 class Homepage extends Component {
   render() {
     return (
-      <div className={Styles.divBackgroundColor}>
+      <div className="divBackgroundColor">
         <Helmet title="Welcome to our Homepage" />
         <Menu />
         <h1>Homepage</h1>
@@ -51,12 +49,12 @@ export default class App extends Component {
     return (
       <div>
         <Helmet
-          htmlAttributes={{lang: "en", amp: undefined}} // amp takes no value
+          htmlAttributes={{ lang: "en", amp: undefined }} // amp takes no value
           titleTemplate="%s | React App"
-          titleAttributes={{itemprop: "name", lang: "en"}}
+          titleAttributes={{ itemprop: "name", lang: "en" }}
           meta={[
-            {name: "description", content: "Server side rendering example"},
-            {name: "viewport", content: "width=device-width, initial-scale=1"}
+            { name: "description", content: "Server side rendering example" },
+            { name: "viewport", content: "width=device-width, initial-scale=1" }
           ]}
         />
         <Switch>
