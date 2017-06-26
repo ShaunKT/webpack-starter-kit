@@ -99,7 +99,9 @@ exports.productionConfig = () => ({
       }
     }),
     new PurifyCSSPlugin({
-      paths: glob.sync(`../src/${entryPoint}/**/*.js`, { nodir: true })
+      verbose: true,
+      minimize: true,
+      paths: glob.sync(path.resolve(__dirname, "../src/**/*"))
     }),
     new OptimizeCssAssetsPlugin({
       cssProcessor: cssnano,
@@ -110,7 +112,7 @@ exports.productionConfig = () => ({
       canPrint: true
     }),
     new ExtractTextPlugin({
-      filename: "styles.css"
+      filename: "styles/styles.css"
     }),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new StatsPlugin("stats.json", {

@@ -5,11 +5,8 @@ import App from "./app.jsx";
 
 export default function serverRenderer({ clientStats, serverStats }) {
   return (req, res, next) => {
-    const css = new Set();
-    const context = {
-      insertCss: (...styles) =>
-        styles.forEach(style => css.add(style._getCss()))
-    };
+    console.log("req.url", req.url);
+    const context = {};
     const markup = ReactDOMServer.renderToString(
       <StaticRouter location={req.url} context={context}>
         <App />
@@ -19,8 +16,8 @@ export default function serverRenderer({ clientStats, serverStats }) {
     const html = `<!doctype html>
     <html>
       <head>
-        <script async src="/client.js"></script>
-        <link rel="stylesheet" href="../styles.css" />
+        <script async src="./client.js"></script>
+        <link rel="stylesheet" href="./styles/styles.css" />
       </head>
       <body>
         <div id="root">${markup}</div>
