@@ -1,14 +1,23 @@
 :global {
+  
+  @import 'colors-palette';
+
 
   body {
-    background: cornsilk;
+    background: #eeeeee;
     background-image: url('../images/image-placeholder.jpg');
     background-repeat: no-repeat;
+    background-attachment: fixed;
     background-position: center;
     display: flex;
+    justify-content: center;
 
     div {
-      color: grey;
+      color: $colorGray;
+    }
+
+    h1 {
+      color: $colorGray;
     }
   }
 
@@ -16,10 +25,6 @@
     background: blue;
     height: 100px;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-content: center;
   }
 
   .divBackgroundColor {

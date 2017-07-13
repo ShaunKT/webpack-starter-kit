@@ -19,31 +19,23 @@ const PurifyCSSPlugin = require('purifycss-webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-// Shared Configs
+// Environments
+const inStaging = process.env.NODE_ENV === 'staging';
 const inProduction = process.env.NODE_ENV === 'production';
 
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
-// Webpack Config
-module.exports = {
+exports.productionConfig = () => ({
   entry: [
-    'babel-polyfill',
-    'webpack-hot-middleware/client',
-    'react-hot-loader/patch',
     path.resolve(__dirname, 'src')
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/bundle.js',
-    publicPath: inProduction ? '/static/' : 'http://localhost:3030/',
+    filename: 'bundle.js',
+    publicPath: '/static/',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.scss', '.css']
   },
   plugins: [
-    new webpack.NamedModulesPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
     new HappyPack({
       id: 'js',
       threadPool: happyThreadPool,
@@ -69,11 +61,11 @@ module.exports = {
         'sass-loader'
       ]
     }),
-    // new HtmlWebpackPlugin({
-    //   filename: 'index.html',
-    //   title: 'Custom template',
-    //   template: './src/views/index.ejs'
-    // }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      title: 'Custom template',
+      template: './src/views/index.ejs'
+    }),
     new OptimizeCssAssetsPlugin({
       cssProcessor: cssnano,
       cssProcessorOptions: {
@@ -93,7 +85,7 @@ module.exports = {
     }),
     new webpack.optimize.UglifyJsPlugin({
       mangle: false,
-      sourceMap: true,
+      sourcemap: false,
       compress: {
         warnings: false,
         drop_console: true,
@@ -124,8 +116,7 @@ module.exports = {
       'process.env': {
         NODE_ENV: JSON.stringify('production')
       }
-    }),
-    // new ExtractTextPlugin('stylesheets/styles.css')
+    })
   ],
   module: {
     rules: [
@@ -135,28 +126,6 @@ module.exports = {
         exclude: /node_modules/,
         include: path.resolve(__dirname, 'src')
       },
-      // {
-      //   test: /\.(css|scss|sass)$/,
-      //   use: ExtractTextPlugin.extract({
-      //     fallback: 'style-loader',
-      //     use: [
-      //       {
-      //         loader: 'css-loader',
-      //         options: {
-      //           modules: true,
-      //           importLoaders: 1
-      //         }
-      //       },
-      //       {
-      //         loader: 'postcss-loader',
-      //         options: {
-      //           plugins: () => [autoprefixer()]
-      //         }
-      //       },
-      //       'sass-loader'
-      //     ]
-      //   })
-      // },
       {
         test: /\.(css|scss|sass)$/,
         loaders: 'happypack/loader?id=styles',
@@ -180,21 +149,5 @@ module.exports = {
       }
     ],
   },
-  devServer: {
-    port: 3030,
-    contentBase: path.resolve(__dirname, 'dist'),
-    hot: true,
-    stats: 'errors-only',
-    compress: true,
-    historyApiFallback: true,
-    inline: true,
-    overlay: {
-      warnings: false,
-      errors: true
-    },
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    }
-  },
   devtool: 'eval-source-map'
-};
+});

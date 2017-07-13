@@ -34,7 +34,7 @@ module.exports = {
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'js/bundle.js',
+    filename: 'bundle.js',
     publicPath: inProduction ? '/static/' : 'http://localhost:3030/',
   },
   resolve: {
@@ -49,31 +49,31 @@ module.exports = {
       threadPool: happyThreadPool,
       loaders: ['react-hot-loader/webpack', 'babel-loader'],
     }),
-    new HappyPack({
-      id: 'styles',
-      threadPool: happyThreadPool,
-      loaders: ['style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            modules: true,
-            importLoaders: 1
-          }
-        },
-        {
-          loader: 'postcss-loader',
-          options: {
-            plugins: () => [autoprefixer()]
-          }
-        },
-        'sass-loader'
-      ]
-    }),
-    // new HtmlWebpackPlugin({
-    //   filename: 'index.html',
-    //   title: 'Custom template',
-    //   template: './src/views/index.ejs'
+    // new HappyPack({
+    //   id: 'styles',
+    //   threadPool: happyThreadPool,
+    //   loaders: ['style-loader',
+    //     {
+    //       loader: 'css-loader',
+    //       options: {
+    //         modules: true,
+    //         importLoaders: 1
+    //       }
+    //     },
+    //     {
+    //       loader: 'postcss-loader',
+    //       options: {
+    //         plugins: () => [autoprefixer()]
+    //       }
+    //     },
+    //     'sass-loader'
+    //   ]
     // }),
+    new HtmlWebpackPlugin({
+      filename: 'index.html',
+      title: 'Custom template',
+      template: './src/views/index.ejs'
+    }),
     new OptimizeCssAssetsPlugin({
       cssProcessor: cssnano,
       cssProcessorOptions: {
@@ -125,7 +125,7 @@ module.exports = {
         NODE_ENV: JSON.stringify('production')
       }
     }),
-    // new ExtractTextPlugin('stylesheets/styles.css')
+    new ExtractTextPlugin('styles.css')
   ],
   module: {
     rules: [
@@ -135,36 +135,36 @@ module.exports = {
         exclude: /node_modules/,
         include: path.resolve(__dirname, 'src')
       },
-      // {
-      //   test: /\.(css|scss|sass)$/,
-      //   use: ExtractTextPlugin.extract({
-      //     fallback: 'style-loader',
-      //     use: [
-      //       {
-      //         loader: 'css-loader',
-      //         options: {
-      //           modules: true,
-      //           importLoaders: 1
-      //         }
-      //       },
-      //       {
-      //         loader: 'postcss-loader',
-      //         options: {
-      //           plugins: () => [autoprefixer()]
-      //         }
-      //       },
-      //       'sass-loader'
-      //     ]
-      //   })
-      // },
       {
         test: /\.(css|scss|sass)$/,
-        loaders: 'happypack/loader?id=styles',
-        include: [
-          path.resolve(__dirname, 'src/styles'),
-          path.resolve(__dirname, './node_modules/purecss/build/')
-        ],
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                importLoaders: 1
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: () => [autoprefixer()]
+              }
+            },
+            'sass-loader'
+          ]
+        })
       },
+      // {
+      //   test: /\.(css|scss|sass)$/,
+      //   loaders: 'happypack/loader?id=styles',
+      //   include: [
+      //     path.resolve(__dirname, 'src/styles'),
+      //     path.resolve(__dirname, './node_modules/purecss/build/')
+      //   ],
+      // },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
@@ -183,6 +183,7 @@ module.exports = {
   devServer: {
     port: 3030,
     contentBase: path.resolve(__dirname, 'dist'),
+    publicPath: inProduction ? '/static/' : 'http://localhost:3030/',
     hot: true,
     stats: 'errors-only',
     compress: true,
