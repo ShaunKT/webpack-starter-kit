@@ -1,32 +1,33 @@
 const path = require('path');
 const webpack = require('webpack');
 const HappyPack = require('happypack');
-const autoprefixer = require('autoprefixer');
 
 // Happy Pack Thread
 const happyThreadPool = HappyPack.ThreadPool({ size: 4 });
 
-// HTML Plugins
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
 // Style Plugins
+const autoprefixer = require('autoprefixer');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 
+// Webpack Config
 exports.developmentConfig = () => ({
   entry: [
+    'babel-polyfill',
     'webpack-hot-middleware/client',
     'react-hot-loader/patch',
     path.resolve(__dirname, 'src')
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/',
+    filename: 'js/bundle.js',
+    publicPath: 'http://localhost:3030/'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.scss', '.css']
   },
   plugins: [
+    new webpack.NamedModulesPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new HappyPack({
       id: 'js',
@@ -53,16 +54,11 @@ exports.developmentConfig = () => ({
         'sass-loader'
       ]
     }),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      title: 'Custom template',
-      template: './src/views/index.ejs'
-    }),
     new StyleLintPlugin({
       configFile: './stylelint.config.js',
       syntax: 'scss'
     }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin()
   ],
   module: {
     rules: [
@@ -96,17 +92,19 @@ exports.developmentConfig = () => ({
     ],
   },
   devServer: {
+    port: 3030,
     contentBase: path.resolve(__dirname, 'dist'),
     hot: true,
     stats: 'errors-only',
-    colors: true,
-    compress: true,
     historyApiFallback: true,
     inline: true,
     overlay: {
       warnings: false,
       errors: true
     },
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
   },
-  devtool: false
+  devtool: 'eval-source-map'
 });

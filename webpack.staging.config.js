@@ -25,7 +25,7 @@ const inProduction = process.env.NODE_ENV === 'production';
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 // Webpack Config
-exports.ssrConfig = () => ({
+exports.stagingConfig = () => ({
   entry: [
     'babel-polyfill',
     'webpack-hot-middleware/client',

@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node src/server/index.js",
-    "dev:wds": "webpack-dev-server",
+    "dev:wds": "webpack-dev-server --env development",
     "dev:start": "nodemon -e js,jsx --ignore dist --exec babel-node src/server",
-    "production": "rimraf dist && webpack -p && babel src -d dist",
-    "prod:start": "NODE_ENV=production pm2 start dist/server && pm2 logs",
+    "staging": "rimraf dist && webpack -p && babel src -d dist --env staging",
+    "production": "rimraf dist && cross-env NODE_ENV=production webpack -p && babel src -d dist",
+    "prod:start": "NODE_ENV=production pm2 start dist/server && pm2 logs --env production",
     "prod:stop": "pm2 delete server"
   },
   "keywords": [
@@ -73,6 +74,7 @@
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
     "compression": "^1.7.0",
+    "cross-env": "^5.0.1",
     "ejs": "^2.5.6",
     "extract-text-webpack-plugin": "2.1.2",
     "global": "^4.3.2",

@@ -12,10 +12,9 @@ import { APP_NAME, PORT } from '../config/env.config';
 
 import renderSsrApp from './app-server';
 
-
 const config = require('../../webpack.config');
 
-const compiler = webpack(config);
+const compiler = webpack(config());
 
 const app = express();
 
@@ -24,10 +23,10 @@ app.use(compression());
 app.use(
   webpackDevMiddleware(compiler, {
     noInfo: true,
-    publicPath: config.output.publicPath,
+    publicPath: config().output.publicPath,
     stats: {
       colors: true,
-      timings: true,
+      timings: true
     }
   })
 );

@@ -19,47 +19,35 @@ const PurifyCSSPlugin = require('purifycss-webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-// Environments
-const inStaging = process.env.NODE_ENV === 'staging';
+// Shared Configs
 const inProduction = process.env.NODE_ENV === 'production';
 
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+// Webpack Config
 exports.productionConfig = () => ({
   entry: [
+    'babel-polyfill',
+    'webpack-hot-middleware/client',
+    'react-hot-loader/patch',
     path.resolve(__dirname, 'src')
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/',
+    filename: 'js/bundle.js',
+    publicPath: inProduction ? '/static/' : 'http://localhost:3030/',
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.scss', '.css']
   },
   plugins: [
+    new webpack.NamedModulesPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new HappyPack({
       id: 'js',
       threadPool: happyThreadPool,
       loaders: ['react-hot-loader/webpack', 'babel-loader'],
-    }),
-    new HappyPack({
-      id: 'styles',
-      threadPool: happyThreadPool,
-      loaders: ['style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            modules: true,
-            importLoaders: 1
-          }
-        },
-        {
-          loader: 'postcss-loader',
-          options: {
-            plugins: () => [autoprefixer()]
-          }
-        },
-        'sass-loader'
-      ]
     }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
@@ -85,7 +73,7 @@ exports.productionConfig = () => ({
     }),
     new webpack.optimize.UglifyJsPlugin({
       mangle: false,
-      sourcemap: false,
+      sourceMap: true,
       compress: {
         warnings: false,
         drop_console: true,
@@ -116,7 +104,8 @@ exports.productionConfig = () => ({
       'process.env': {
         NODE_ENV: JSON.stringify('production')
       }
-    })
+    }),
+    new ExtractTextPlugin('stylesheets/styles.css')
   ],
   module: {
     rules: [
@@ -128,11 +117,25 @@ exports.productionConfig = () => ({
       },
       {
         test: /\.(css|scss|sass)$/,
-        loaders: 'happypack/loader?id=styles',
-        include: [
-          path.resolve(__dirname, 'src/styles'),
-          path.resolve(__dirname, './node_modules/purecss/build/')
-        ],
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                importLoaders: 1
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: () => [autoprefixer()]
+              }
+            },
+            'sass-loader'
+          ]
+        })
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
@@ -147,7 +150,7 @@ exports.productionConfig = () => ({
           }
         ]
       }
-    ],
+    ]
   },
   devtool: 'eval-source-map'
 });
