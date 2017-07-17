@@ -1,0 +1,61 @@
+:global {
+  
+  @import 'colors-palette';
+
+
+  body {
+    background: #eeeeee;
+    background-image: url('../images/image-placeholder.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+
+    div {
+      color: $colorGray;
+    }
+
+    h1 {
+      color: $colorGray;
+    }
+  }
+
+  .class-btn {
+    background: blue;
+    height: 100px;
+    width: 100%;
+  }
+
+  .divBackgroundColor {
+    background: blue;
+  }
+
+  .kajsfsdsgfdndas {
+    background: blue;
+  }
+
+  .kajdfsfgsdafsndas {
+    background: blue;
+  }
+
+  .kaqweffqjsndas {
+    background: blue;
+  }
+
+  .kabvzcjsndas {
+    background: blue;
+  }
+
+  .kajsndadafknackldas {
+    background: blue;
+  }
+
+  .kajsnmxksdndas {
+    background: blue;
+  }
+
+  .zmcvmsd {
+    background: blue;
+  }
+}

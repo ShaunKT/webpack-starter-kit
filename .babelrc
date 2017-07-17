@@ -1,43 +1,21 @@
 {
     "presets": [
-        ["es2015", {"modules": false}],
-        ["es2016"],
+        "env",
         "react",
-        ["env", 
+        "stage-0",
+        "es2016",
+        "es2017",
+        [
+            "es2015",
             {
-                "modules": false,
-                "targets": {
-                    "browsers": ["last 2 versions", "safari 7"]
-                },
-                "development": {
-                    "presets": ["react-optimize"],
-                    "plugins": [
-                        "react-hot-loader/babel"
-                    ]
-                },
-                "staging": {
-                    "presets": ["react-optimize"],
-                    "plugins": [
-                        ["transform-react-remove-prop-types", {
-                            "mode": "wrap",
-                            "ignoreFilenames": ["node_modules"]
-                        }]
-                    ]
-                },
-                "production": {
-                    "presets": ["react-optimize"],
-                    "plugins": [
-                        ["transform-react-remove-prop-types", {
-                            "mode": "wrap",
-                            "ignoreFilenames": ["node_modules"]
-                        }]
-                    ]
-                }
+                "loose": true,
+                "modules": false
             }
-        ],   
+        ]
     ],
     "plugins": [
-        "syntax-dynamic-import", 
-        "react-hot-loader/babel"
-    ],
+        "react-hot-loader/babel",
+        "syntax-dynamic-import",
+        "transform-runtime"
+    ]
 }

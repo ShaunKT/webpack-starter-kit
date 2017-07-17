@@ -1,27 +1,18 @@
-// LIBS
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import 'react-hot-loader/patch';
+import App from './client/app';
 import { AppContainer } from 'react-hot-loader';
 
-//Styles
-import './styles/index.scss';
+import './styles/main.scss';
+import 'purecss';
 
-//Pages
-import  Main from './components/component';
-
-const render = Component => {
-  ReactDOM.render(
-    <AppContainer>
-      <Component />
-    </AppContainer>,
-    document.getElementById('root')
-  );
-};
-
-render(Main);
+ReactDOM.render(
+  <AppContainer>
+    <App />
+  </AppContainer>,
+  document.getElementById('app-root')
+);
 
 if (module.hot) {
-  module.hot.accept('./components/component', () => { render(Main); });
+  module.hot.accept();
 }
