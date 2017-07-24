@@ -8,9 +8,9 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
 // Shared Configs
-import { APP_NAME, PORT } from '../config/env.config';
+import { PORT } from '../../config/env.config';
 
-import renderSsrApp from './app-server';
+import renderApp from './server-app';
 
 const config = require('../../webpack.config');
 
@@ -36,7 +36,7 @@ app.use(webpackHotMiddleware(compiler));
 app.use('/static/', express.static('dist'));
 
 app.get('/', (req, res) => {
-  res.send(renderSsrApp(APP_NAME));
+  res.send(renderApp());
 });
 
 app.listen(PORT, (err) => {
