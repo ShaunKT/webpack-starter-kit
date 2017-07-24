@@ -1,11 +1,11 @@
 :global {
   
-  @import 'colors-palette';
+  @import './ui/color-palette';
 
 
   body {
     background: #eeeeee;
-    background-image: url('../images/image-placeholder.jpg');
+    // background-image: url('../images/image-placeholder.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
@@ -13,11 +13,11 @@
     justify-content: center;
 
     div {
-      color: $colorGray;
+      color: $colorGrey;
     }
 
     h1 {
-      color: $colorGray;
+      color: $colorGrey;
     }
   }
 
@@ -26,36 +26,17 @@
     height: 100px;
     width: 100%;
   }
+  
 
-  .divBackgroundColor {
+  .Testkajdfsfgsdafsndas {
     background: blue;
   }
 
-  .kajsfsdsgfdndas {
+  .Bestkaqweffqjsndas {
     background: blue;
   }
 
-  .kajdfsfgsdafsndas {
-    background: blue;
-  }
-
-  .kaqweffqjsndas {
-    background: blue;
-  }
-
-  .kabvzcjsndas {
-    background: blue;
-  }
-
-  .kajsndadafknackldas {
-    background: blue;
-  }
-
-  .kajsnmxksdndas {
-    background: blue;
-  }
-
-  .zmcvmsd {
+  .Zestkabvzcjsndas {
     background: blue;
   }
 }
