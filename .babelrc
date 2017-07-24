@@ -1,8 +1,7 @@
 {
     "presets": [
+        "flow",
         "env",
-        "react",
-        "stage-0",
         "es2016",
         "es2017",
         [
@@ -11,11 +10,19 @@
                 "loose": true,
                 "modules": false
             }
-        ]
+        ],
+        "react",
+        "stage-0"
     ],
     "plugins": [
-        "react-hot-loader/babel",
         "syntax-dynamic-import",
         "transform-runtime"
-    ]
+    ],
+    "env": {
+        "development": {
+            "plugins": [
+                "react-hot-loader/babel"
+            ]
+        }
+    }
 }

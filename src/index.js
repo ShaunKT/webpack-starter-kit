@@ -1,18 +1,32 @@
+// @flow
+/* eslint-disable global-require */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './client/app';
 import { AppContainer } from 'react-hot-loader';
 
-import './styles/main.scss';
-import 'purecss';
+import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render(
-  <AppContainer>
-    <App />
-  </AppContainer>,
-  document.getElementById('app-root')
+// Styles
+import './styles/main.scss';
+
+// Root Entry
+const rootElement = document.getElementById('mount-app');
+
+const mainApp = AppComponent => (
+  <BrowserRouter>
+    <AppContainer>
+      <AppComponent />
+    </AppContainer>
+  </BrowserRouter>
 );
 
+ReactDOM.render(mainApp(App), rootElement);
+
 if (module.hot) {
-  module.hot.accept();
+  module.hot.accept('./client/app', () => {
+    const NextApp = require('./client/app').default;
+    ReactDOM.render(mainApp(NextApp), rootElement);
+  });
 }
