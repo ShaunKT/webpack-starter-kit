@@ -1,4 +1,10 @@
-export const homePage = () => null;
+// @flow
+
+export const landingPage = () => null;
+
+export const helloPage = () => ({
+  hello: { message: 'Server-side preloaded message' },
+});
 
 export const dashboardPage = () => null;
 

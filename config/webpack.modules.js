@@ -21,10 +21,10 @@ exports.lintJavaScript = ({
           enforce: 'pre',
 
           loader: 'eslint-loader',
-          options,
-        },
-      ],
-    },
+          options
+        }
+      ]
+    }
   });
 
 // Babel Loader
@@ -37,10 +37,10 @@ exports.loadJavaScript = ({
           test: /\.(js|jsx)$/,
           include,
           exclude,
-          use: 'happypack/loader?id=js',
-        },
-      ],
-    },
+          use: 'happypack/loader?id=js'
+        }
+      ]
+    }
   });
 
 // Minify JavaSscript Loader
@@ -63,15 +63,15 @@ exports.minifyJavaScript = () => ({
         if_return: true,
         join_vars: true
       }
-    }),
-  ],
+    })
+  ]
 });
 
 // Bundle Splitting
 exports.extractBundles = (bundles) => ({
   plugins: bundles.map((bundle) => (
     new webpack.optimize.CommonsChunkPlugin(bundle)
-  )),
+  ))
 });
 
 // == Styles == //
@@ -85,16 +85,16 @@ exports.loadCSS = ({
           test: /\.(css|scss|sass)$/,
           include,
           exclude,
-          use: 'happypack/loader?id=styles',
-        },
-      ],
-    },
+          use: 'happypack/loader?id=styles'
+        }
+      ]
+    }
   });
 
 // Extract CSS to extrenal file "stylesheets/styles.css"
 exports.extractCSS = ({ include, exclude }) => {
   const plugin = new ExtractTextPlugin({
-    filename: 'stylesheet/styles.css',
+    filename: 'stylesheet/styles.css'
   });
 
   return {
@@ -117,12 +117,12 @@ exports.extractCSS = ({ include, exclude }) => {
               'postcss-loader',
               'sass-loader'
             ],
-            fallback: 'style-loader',
-          }),
-        },
-      ],
+            fallback: 'style-loader'
+          })
+        }
+      ]
     },
-    plugins: [plugin],
+    plugins: [plugin]
   };
 };
 
@@ -131,9 +131,9 @@ exports.purifyCSS = ({ paths }) => ({
   plugins: [
     new PurifyCSSPlugin({
       paths,
-      minimize: true,
-    }),
-  ],
+      minimize: true
+    })
+  ]
 });
 
 // Minify Styles
@@ -142,9 +142,9 @@ exports.minifyCSS = ({ options }) => ({
     new OptimizeCSSAssetsPlugin({
       cssProcessor: cssnano,
       cssProcessorOptions: options,
-      canPrint: true,
-    }),
-  ],
+      canPrint: true
+    })
+  ]
 });
 
 // Image Loader
@@ -161,11 +161,11 @@ exports.loadImages = ({ include, exclude, options } = {}) => ({
             loader: 'url-loader',
             options,
           },
-          'image-webpack-loader',
+          'image-webpack-loader'
         ]
-      },
-    ],
-  },
+      }
+    ]
+  }
 });
 
 // == Environment Variables == //
@@ -176,15 +176,15 @@ exports.setFreeVariable = (key, value) => {
 
   return {
     plugins: [
-      new webpack.DefinePlugin(env),
-    ],
+      new webpack.DefinePlugin(env)
+    ]
   };
 };
 
 // == Server == //
 // Source Maps
 exports.generateSourceMaps = ({ type }) => ({
-  devtool: type,
+  devtool: type
 });
 
 // Webpack Dev Server
@@ -207,5 +207,5 @@ exports.devServer = ({
       headers: {
         'Access-Control-Allow-Origin': '*'
       }
-    },
+    }
   });
