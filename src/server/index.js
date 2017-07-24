@@ -8,9 +8,11 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
 // Shared Configs
-import { PORT } from '../../config/env.config';
+import { PORT } from '../config/env.config';
 
-import renderApp from './server-app';
+// Elements
+// import renderApp from './server-app';
+import appRoute from './server-routes';
 
 const config = require('../../webpack.config');
 
@@ -35,9 +37,7 @@ app.use(webpackHotMiddleware(compiler));
 
 app.use('/static/', express.static('dist'));
 
-app.get('/', (req, res) => {
-  res.send(renderApp());
-});
+appRoute(app);
 
 app.listen(PORT, (err) => {
   if (err) {

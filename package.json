@@ -15,8 +15,9 @@
   "scripts": {
     "start:wds": "webpack-dev-server --env development",
     "start:dev": "nodemon --ignore dist --exec babel-node src/server",
-    "production": "rimraf dist && cross-env NODE_ENV=production webpack -p --env production",
-    "staging": "rimraf dist && cross-env NODE_ENV=production webpack -p --env staging",
+    "build:staging": "rimraf dist && cross-env NODE_ENV=production webpack -p --env staging && babel src -d dist",
+    "build:production": "rimraf dist && cross-env NODE_ENV=production webpack -p --env production && babel src -d dist",
+    "start:prod": "NODE_ENV=production node dist/server/index.js",
     "stats": "webpack --env production --profile --json > stats.json",
     "js:lint": "eslint src/ webpack.*.js --cache",
     "css:lint": "stylelint src/styles/**/**/*.scss"
@@ -81,13 +82,20 @@
     "babel-preset-es2017": "^6.24.1",
     "cross-env": "^5.0.1",
     "cssnano": "^3.10.0",
+    "immutable": "4.0.0-rc.2",
+    "isomorphic-fetch": "^2.2.1",
     "nodemon": "^1.11.0",
     "optimize-css-assets-webpack-plugin": "^2.0.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-helmet": "^5.1.3",
     "react-hot-loader": "next",
+    "react-redux": "^5.0.5",
     "react-router": "^4.1.2",
     "react-router-dom": "^4.1.2",
+    "redux": "^3.7.2",
+    "redux-actions": "^2.2.1",
+    "redux-thunk": "^2.2.0",
     "stylelint": "^8.0.0"
   }
 }

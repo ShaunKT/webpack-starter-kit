@@ -19,22 +19,23 @@ const parts = require('./config/webpack.modules');
 const PATHS = {
   app: path.join(__dirname, 'src'),
   server: path.join(__dirname, 'src/server/'),
-  styles: path.join(__dirname, 'src/styles'),
+  styles: path.join(__dirname, './src/styles/'),
   views: path.resolve(__dirname, './src/views'),
   public: inProduction ? '/static/' : 'http://localhost:8080/',
-  dist: path.join(__dirname, 'dist'),
+  dist: path.join(__dirname, 'dist')
 };
 
 // Common Webpack Configuration
 const commonConfig = merge([
   {
     entry: {
-      bundle: PATHS.app,
+      bundle: PATHS.app
     },
     output: {
       path: PATHS.dist,
       filename: 'js/[name].js',
       publicPath: PATHS.public,
+      chunkFilename: 'js/[name].js'
     },
     resolve: {
       extensions: ['.js', '.jsx', '.json', '.scss', '.css']
@@ -43,7 +44,7 @@ const commonConfig = merge([
       new HtmlWebpackPlugin({
         filename: 'index.html',
         title: 'Webpack Starter Kit',
-        template: './src/views/index.ejs',
+        template: './src/views/index.ejs'
       }),
       new HappyPack({
         id: 'js',
@@ -52,7 +53,7 @@ const commonConfig = merge([
           {
             loader: 'babel-loader',
             options: {
-              cacheDirectory: true,
+              cacheDirectory: true
             }
           }
         ],
@@ -61,8 +62,8 @@ const commonConfig = merge([
   },
   parts.loadJavaScript({
     include: PATHS.app,
-    exclude: /node_modules/,
-  }),
+    exclude: /node_modules/
+  })
 ]);
 
 // Development Webpack Config
@@ -70,13 +71,13 @@ const developmentConfig = merge([
   {
     entry: {
       hmr: [
+        'react-hot-loader/patch',
         'babel-polyfill',
-        "webpack-dev-server/client?http://localhost:8080",
-        "react-hot-loader/patch",
-      ],
+        "webpack-dev-server/client?http://localhost:8080"
+      ]
     },
     output: {
-      devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
+      devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
@@ -84,7 +85,7 @@ const developmentConfig = merge([
       new HtmlWebpackPlugin({
         filename: 'index.html',
         title: 'Webpack Starter Kit',
-        template: './src/views/index.ejs',
+        template: './src/views/index.ejs'
       }),
       new HappyPack({
         id: 'styles',
@@ -108,24 +109,24 @@ const developmentConfig = merge([
     exclude: PATHS.styles,
     options: {
       emitWarning: true,
-      emitError: true,
+      emitError: true
     },
   }),
   parts.loadCSS({
     include: [
       PATHS.styles,
     ],
-    exclude: /node_modules/,
+    exclude: /node_modules/
   }),
   parts.loadImages({
-    exclude: /node_modules/,
+    exclude: /node_modules/
   }),
   parts.generateSourceMaps({
     type: 'cheap-module-eval-source-map'
   }),
   parts.devServer({
     host: process.env.HOST,
-    port: process.env.PORT,
+    port: process.env.PORT
   }),
 ]);
 
@@ -135,11 +136,11 @@ const stagingConfig = merge([
     recordsPath: path.join(__dirname, 'records.json'),
     output: {
       chunkFilename: 'js/[name].js',
-      filename: 'js/[name].js',
+      filename: 'js/[name].js'
     },
     plugins: [
-      new webpack.HashedModuleIdsPlugin(),
-    ],
+      new webpack.HashedModuleIdsPlugin()
+    ]
   },
   parts.extractBundles([
     {
@@ -153,28 +154,26 @@ const stagingConfig = merge([
     },
     {
       name: 'manifest',
-      minChunks: Infinity,
+      minChunks: Infinity
     },
   ]),
   parts.extractCSS({
-    include: [
-      PATHS.styles
-    ],
-    exclude: /node_modules/,
+    include: PATHS.styles,
+    exclude: /node_modules/
   }),
   parts.loadImages({
     exclude: /node_modules/,
     options: {
       limit: 10000,
-      name: 'images/[name].[hash:8].[ext]',
+      name: 'images/[name].[hash:8].[ext]'
     },
   }),
   parts.minifyCSS({
     options: {
       discardComments: {
-        removeAll: false,
+        removeAll: false
       },
-      safe: true,
+      safe: true
     },
   }),
   parts.setFreeVariable(
@@ -186,18 +185,13 @@ const stagingConfig = merge([
   }),
 ]);
 
-
 // Production Webpack Config
 const productionConfig = merge([
   {
     recordsPath: path.join(__dirname, 'records.json'),
-    output: {
-      chunkFilename: 'js/[name].js',
-      filename: 'js/[name].js',
-    },
     plugins: [
-      new webpack.HashedModuleIdsPlugin(),
-    ],
+      new webpack.HashedModuleIdsPlugin()
+    ]
   },
   parts.extractBundles([
     {
@@ -211,29 +205,26 @@ const productionConfig = merge([
     },
     {
       name: 'manifest',
-      minChunks: Infinity,
+      minChunks: Infinity
     },
   ]),
   parts.extractCSS({
-    include: [
-      PATHS.styles
-    ],
-    exclude: /node_modules/,
+    include: PATHS.app
   }),
   parts.loadImages({
     exclude: /node_modules/,
     options: {
       limit: 10000,
-      name: 'images/[name].[hash:8].[ext]',
+      name: 'images/[name].[hash:8].[ext]'
     },
   }),
   parts.minifyJavaScript(),
   parts.minifyCSS({
     options: {
       discardComments: {
-        removeAll: false,
+        removeAll: false
       },
-      safe: true,
+      safe: true
     },
   }),
   parts.setFreeVariable(

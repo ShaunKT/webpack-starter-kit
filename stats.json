@@ -1,8 +1,7 @@
 
 Starting to optimize CSS...
 Processing stylesheet/styles.d3225cee.css...
-Processed stylesheet/styles.d3225cee.css, before: 598, after: 373, ratio: 62.37%
-{
+Processed stylesheet/styles.d3225cee.css, before: 598, after: 373, ratio: 62.37%{
   "errors": [],
   "warnings": [],
   "version": "3.3.0",
