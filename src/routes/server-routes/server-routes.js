@@ -4,17 +4,17 @@ import {
   landingPage,
   helloPage,
   dashboardPage,
-  contactPage,
-} from './server-controller';
+  contactPage
+} from '../../controllers/controller';
 
 import {
   LANDING_PAGE_ROUTE,
   HELLO_PAGE_ROUTE,
   DASHBOARD_PAGE_ROUTE,
   CONTACT_PAGE_ROUTE
-} from '../routes/routes';
+} from '../routes';
 
-import renderApp from './server-app';
+import renderApp from '../../server/server-app';
 
 export default (app: Object) => {
   app.get(LANDING_PAGE_ROUTE, (req, res) => {

@@ -8,11 +8,11 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
 // Shared Configs
-import { PORT } from '../config/env.config';
+import { PORT, inProduction } from '../config/env.config';
 
 // Elements
 // import renderApp from './server-app';
-import appRoute from './server-routes';
+import appRoute from '../routes/server-routes/server-routes';
 
 const config = require('../../webpack.config');
 
@@ -22,18 +22,20 @@ const app = express();
 
 app.use(compression());
 
-app.use(
-  webpackDevMiddleware(compiler, {
-    noInfo: true,
-    publicPath: config().output.publicPath,
-    stats: {
-      colors: true,
-      timings: true
-    }
-  })
-);
+if (!inProduction) {
+  app.use(
+    webpackDevMiddleware(compiler, {
+      noInfo: true,
+      publicPath: config().output.publicPath,
+      stats: {
+        colors: true,
+        timings: true
+      }
+    })
+  );
 
-app.use(webpackHotMiddleware(compiler));
+  app.use(webpackHotMiddleware(compiler));
+}
 
 app.use('/static/', express.static('dist'));
 
