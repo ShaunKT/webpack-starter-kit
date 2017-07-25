@@ -19,8 +19,7 @@
     "build:production": "rimraf dist && cross-env NODE_ENV=production webpack -p --env production && babel src -d dist",
     "start:prod": "NODE_ENV=production node dist/server/index.js",
     "stats": "webpack --env production --profile --json > stats.json",
-    "js:lint": "eslint src/ webpack.*.js --cache",
-    "css:lint": "stylelint src/styles/**/**/*.scss"
+    "js:lint": "eslint src/ webpack.*.js --cache"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -53,6 +52,7 @@
     "node-sass": "^4.5.3",
     "npm": "^5.3.0",
     "postcss": "^6.0.8",
+    "postcss-bem-linter": "^3.0.0",
     "postcss-cssnext": "^3.0.2",
     "postcss-loader": "^2.0.6",
     "purify-css": "^1.2.5",
@@ -60,7 +60,11 @@
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
-    "stylelint-webpack-plugin": "^0.9.0",
+    "stylelint": "^8.0.0",
+    "stylelint-config-standard": "^17.0.0",
+    "stylelint-scss": "^1.5.1",
+    "stylelint-selector-bem-pattern": "^1.1.0",
+    "stylelint-webpack-plugin": "0.8.0",
     "uglify-js": "^3.0.26",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.9",
@@ -95,7 +99,6 @@
     "react-router-dom": "^4.1.2",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
-    "redux-thunk": "^2.2.0",
-    "stylelint": "^8.0.0"
+    "redux-thunk": "^2.2.0"
   }
 }

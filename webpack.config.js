@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HappyPack = require('happypack');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 // Webpack Plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -13,7 +14,7 @@ const happyThreadPool = HappyPack.ThreadPool({ size: 4 });
 const inProduction = process.env.NODE_ENV === 'production';
 
 // Webpack Modules
-const parts = require('./config/webpack.modules');
+const parts = require('./webpack_configs/webpack.modules');
 
 // Directory Paths
 const PATHS = {
@@ -80,6 +81,10 @@ const developmentConfig = merge([
       devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]'
     },
     plugins: [
+      new StyleLintPlugin({
+        configFile: './stylelint.config.js',
+        syntax: 'scss'
+      }),
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NamedModulesPlugin(),
       new HtmlWebpackPlugin({
@@ -100,9 +105,9 @@ const developmentConfig = merge([
           },
           'postcss-loader',
           'sass-loader'
-        ],
-      }),
-    ],
+        ]
+      })
+    ]
   },
   parts.lintJavaScript({
     include: PATHS.app,
@@ -110,11 +115,11 @@ const developmentConfig = merge([
     options: {
       emitWarning: true,
       emitError: true
-    },
+    }
   }),
   parts.loadCSS({
     include: [
-      PATHS.styles,
+      PATHS.styles
     ],
     exclude: /node_modules/
   }),
@@ -127,7 +132,7 @@ const developmentConfig = merge([
   parts.devServer({
     host: process.env.HOST,
     port: process.env.PORT
-  }),
+  })
 ]);
 
 // Staging Webpack Config
@@ -150,12 +155,12 @@ const stagingConfig = merge([
         resource &&
         resource.indexOf('node_modules') >= 0 &&
         resource.match(/\.js$/)
-      ),
+      )
     },
     {
       name: 'manifest',
       minChunks: Infinity
-    },
+    }
   ]),
   parts.extractCSS({
     include: PATHS.styles,
@@ -166,7 +171,7 @@ const stagingConfig = merge([
     options: {
       limit: 10000,
       name: 'images/[name].[hash:8].[ext]'
-    },
+    }
   }),
   parts.minifyCSS({
     options: {
@@ -174,7 +179,7 @@ const stagingConfig = merge([
         removeAll: false
       },
       safe: true
-    },
+    }
   }),
   parts.setFreeVariable(
     'process.env.NODE_ENV',
@@ -182,7 +187,7 @@ const stagingConfig = merge([
   ),
   parts.generateSourceMaps({
     type: 'source-map'
-  }),
+  })
 ]);
 
 // Production Webpack Config
@@ -201,12 +206,12 @@ const productionConfig = merge([
         resource &&
         resource.indexOf('node_modules') >= 0 &&
         resource.match(/\.js$/)
-      ),
+      )
     },
     {
       name: 'manifest',
       minChunks: Infinity
-    },
+    }
   ]),
   parts.extractCSS({
     include: PATHS.app
@@ -216,7 +221,7 @@ const productionConfig = merge([
     options: {
       limit: 10000,
       name: 'images/[name].[hash:8].[ext]'
-    },
+    }
   }),
   parts.minifyJavaScript(),
   parts.minifyCSS({
@@ -225,7 +230,7 @@ const productionConfig = merge([
         removeAll: false
       },
       safe: true
-    },
+    }
   }),
   parts.setFreeVariable(
     'process.env.NODE_ENV',
@@ -233,7 +238,7 @@ const productionConfig = merge([
   ),
   parts.generateSourceMaps({
     type: false
-  }),
+  })
 ]);
 
 // Webpack Config

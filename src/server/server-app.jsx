@@ -14,7 +14,7 @@ import { StaticRouter } from 'react-router'
 import { Provider } from 'react-redux'
 
 // Elements
-import initStore from './server-store';
+import initStore from '../store/hello-store';
 import App from '../client/client-app';
 
 // Shared Configs
