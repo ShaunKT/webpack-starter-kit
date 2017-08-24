@@ -1,0 +1,49 @@
+/* @flow */
+
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import Helmet from 'react-helmet';
+import _ from 'lodash';
+
+import config from '../config';
+import routes from '../routes/routes';
+
+export default () => {
+  // Use it when sub routes are added to any route it'll work
+  const routeWithSubRoutes = route => (
+    <Route
+      key={_.uniqueId()}
+      exact={route.exact || false}
+      path={route.path}
+      render={props => (
+        // Pass the sub-routes down to keep nesting
+        <route.component {...props} routes={route.routes} />
+      )}
+    />
+  );
+
+  return (
+    <div>
+      <Helmet {...config.app} />
+      <div>
+        <img
+          src={require('../images/logo.jpg')}
+          alt="Logo"
+        />
+        <h1>{config.app.title}</h1>
+      </div>
+      <hr />
+      <img
+        src={require('../images/image-placeholder.jpg')}
+        alt="Place Holder"
+      />
+      <img
+        src={require('../images/image-placeholder.png')}
+        alt="Place Holder"
+      />
+      <Switch>
+        {routes.map(route => routeWithSubRoutes(route))}
+      </Switch>
+    </div>
+  );
+};

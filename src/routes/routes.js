@@ -1,7 +1,32 @@
-// @flow
+/* @flow */
 
-export const LANDING_PAGE_ROUTE = '/';
-export const HELLO_PAGE_ROUTE = '/hello'
-export const DASHBOARD_PAGE_ROUTE = '/dashboard';
-export const CONTACT_PAGE_ROUTE = '/contact';
-export const NOT_FOUND_DEMO_PAGE_ROUTE = '/404';
+// Actions
+import { fetchUsersIfNeeded } from '../actions/home';
+import { fetchUserIfNeeded } from '../actions/users';
+
+// Pages
+import HomePage from '../elements/containers/Home';
+import UserInfoPage from '../elements/containers/UserInfo';
+import NotFoundPage from '../elements/containers/NotFound';
+
+export default [
+  {
+    path: '/',
+    exact: true,
+    component: HomePage, // Add your route here
+    loadData: dispatch => Promise.all([
+      dispatch(fetchUsersIfNeeded()),
+    ]),
+  },
+  {
+    path: '/UserInfo/:id',
+    component: UserInfoPage,
+    loadData: (dispatch, params) => Promise.all([
+      dispatch(fetchUserIfNeeded(params.id)),
+    ]),
+  },
+  {
+    path: '*',
+    component: NotFoundPage,
+  },
+];

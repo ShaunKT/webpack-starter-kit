@@ -1,5 +1,3 @@
-module.exports = {
-  plugins: {
-    'postcss-cssnext': {},
-  }
-};
+/* Set your postcss-loader configuration here */
+
+module.exports = { plugins: [require('autoprefixer')] };

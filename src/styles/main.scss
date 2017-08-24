@@ -1,11 +1,9 @@
 :global {
-  
   @import './ui/color-palette';
-
 
   body {
     background: #eeeeee;
-    // background-image: url('../images/image-placeholder.jpg');
+    background-image: url('../images/image-placeholder.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
@@ -18,6 +16,7 @@
 
     h1 {
       color: $colorGrey;
+      font-weight: bold;
     }
   }
 
@@ -26,7 +25,6 @@
     height: 100px;
     width: 100%;
   }
-  
 
   .Testkajdfsfgsdafsndas {
     background: blue;

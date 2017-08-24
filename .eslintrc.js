@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ["plugin:react/recommended"], //'airbnb-base',
+  extends: ["airbnb"],
   parser: "babel-eslint",
   env: {
     browser: true,
@@ -20,6 +20,7 @@ module.exports = {
   rules: {
     "no-console": 0,
     "import/prefer-default-export": 0,
+    "import/no-extraneous-dependencies": 0,
     "import/first": 0,
     "no-param-reassign": 0,
     "no-redeclare": 0,
@@ -30,12 +31,23 @@ module.exports = {
     "block-spacing": 1,
     "no-unused-vars": 1,
     "no-trailing-spaces": 0,
-    "comma-dangle": 1,
+    "comma-dangle": 0,
     "object-shorthand": 1,
     "object-curly-spacing": 0,
     "no-multiple-empty-lines": 1,
     "arrow-body-style": 0,
     "brace-style": 0,
-    "react/prefer-stateless-function": 0
+    "react/prefer-stateless-function": 0,
+    "no-underscore-dangle": 0,
+    "global-require": 0,
+    "react/jsx-filename-extension": 0,
+    "react/prop-types": 0
+  },
+  globals: {
+    __CLIENT__: true,
+    __SERVER__: true,
+    __DISABLE_SSR__: true,
+    __DEV__: true,
+    webpackIsomorphicTools: true
   }
 };
