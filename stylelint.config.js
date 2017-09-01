@@ -17,18 +17,6 @@ module.exports = {
     'declaration-colon-space-before': 'never',
     'block-opening-brace-space-before': 'always',
     'declaration-block-single-line-max-declarations': 1,
-    'rule-empty-line-before': [
-      'always',
-      {
-        ignore: ['after-comment'],
-      },
-    ],
-    'comment-empty-line-before': [
-      'always',
-      {
-        ignore: ['stylelint-commands'],
-      },
-    ],
     'declaration-property-value-blacklist': {
       '/^border/': ['none'],
     },

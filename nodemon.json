@@ -1,9 +1,9 @@
 {
-  "watch": [
-    "index.js",
-    "webpack/",
-    "!webpack/webpack.server.config.js",
-    "src/server/server.js",
-    "src/server/server-html.js"
-  ]
+	"watch": [
+		"index.js",
+		"webpack/",
+		"!webpack/webpack.server.babel.js",
+		"src/server/server.js",
+		"src/views/Html.js"
+	]
 }

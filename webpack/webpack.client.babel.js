@@ -1,59 +1,36 @@
-/* eslint-disable */
-"use strict";
+'use strict'; // eslint-disable-line
 
+// Libs
 const path = require('path');
-const glob = require('glob');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HappyPack = require('happypack');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // Webpack Plugins
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // Happy Pack Thread
 const happyThreadPool = HappyPack.ThreadPool({ size: 4 });
 
-// Environment Target
-const nodeEnv = process.env.NODE_ENV || 'development';
-const inDevelopment = process.env.NODE_ENV === 'development';
-const inStaging = process.env.NODE_ENV === 'staging';
-const inProduction = process.env.NODE_ENV === 'production';
-
-// Webpack Modules
+// Configuration
 const factor = require('./webpack.modules.config');
 
-// Webpack Isomorphic Tools Plugin
+// Environment Target
+import { nodeEnv, inDevelopment, inProduction } from '../src/config/index';
+
 const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
-const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack.isomorphic.config')).development(inDevelopment);
+const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(
+  require('./webpackIsomorphicConfig.config'),
+).development(inDevelopment);
 
 // Directory Paths
 const PATHS = {
-  app: path.join(process.cwd(), './src/'),
+  src: path.join(process.cwd(), './src'),
+  app: path.join(process.cwd(), './src/index.js'),
   styles: path.join(process.cwd(), './src/styles'),
   build: path.join(process.cwd(), './build/'),
-  public: '/',
   nodeModules: /node_modules/,
-};
-
-// Setting the entry for development/prodcution
-const getEntry = () => {
-  // For development
-  let entry = [
-    'babel-polyfill',
-    'react-hot-loader/patch',
-    'webpack-hot-middleware/client?reload=true',
-    PATHS.app,
-  ];
-
-  // For prodcution
-  if (!inDevelopment) {
-    entry = {
-      bundle: PATHS.app
-    };
-  }
-  return entry;
 };
 
 // Common Webpack Configuration
@@ -61,23 +38,22 @@ const commonConfig = merge([
   {
     name: 'client',
     target: 'web',
-    cache: inDevelopment,
-    devtool: inDevelopment || inStaging ? 'cheap-module-eval-source-map' : 'hidden-source-map',
     context: path.join(process.cwd()),
-    entry: getEntry(),
     output: {
-      path: path.join(process.cwd(), './build/assets/'),
-      publicPath: '/assets/',
-      filename: inDevelopment ? 'js/[name].js' : 'js/[name].[chunkhash:8].js',
-      chunkFilename: inDevelopment ? 'js/[name].chunk.js' : 'js/[name].[chunkhash:8].chunk.js',
-      pathinfo: inDevelopment,
+      path: path.join(process.cwd(), './build/static'),
+      publicPath: '/static/',
+      filename: 'js/[name].js',
+      chunkFilename: 'js/[name].js',
     },
     resolve: {
-      extensions: ['.js', '.jsx', '.json', '.scss', '.css']
+      modules: ['src', 'node_modules'],
+      descriptionFiles: ['package.json'],
+      moduleExtensions: ['-loader'],
+      extensions: ['.js', '.jsx', '.json', '.scss', '.css'],
     },
     plugins: [
       new HappyPack({
-        id: 'js',
+        id: 'scripts',
         threadPool: happyThreadPool,
         loaders: [
           {
@@ -85,47 +61,46 @@ const commonConfig = merge([
             options: {
               cacheDirectory: inDevelopment,
               babelrc: true,
-            }
-          }
+            },
+          },
         ],
       }),
       new ExtractTextPlugin({
-        filename: 'styles/[name].[contenthash:8].css',
+        filename: 'styles/[name].css',
         allChunks: true,
         disable: inDevelopment,
-        ignoreOrder: false,
-      }),
-      new webpack.LoaderOptionsPlugin({
-        options: {
-          eslint: { failOnError: true },
-          context: '/',
-          debug: inDevelopment,
-          minimize: inStaging || inProduction,
-        },
+        ignoreOrder: true,
       }),
       new webpack.EnvironmentPlugin({
-        NODE_ENV: JSON.stringify(nodeEnv)
+        NODE_ENV: JSON.stringify(nodeEnv),
       }),
       new webpack.DefinePlugin({
         __CLIENT__: true,
         __SERVER__: false,
         __DEV__: inDevelopment,
       }),
+      new webpack.LoaderOptionsPlugin({
+        options: {
+          context: '/',
+          debug: inDevelopment,
+        },
+      }),
       new webpack.NoEmitOnErrorsPlugin(),
+      new webpack.HashedModuleIdsPlugin(),
       webpackIsomorphicToolsPlugin,
     ],
     module: {
       rules: [
         {
           test: /\.jsx?$/,
-          include: PATHS.app,
+          include: PATHS.src,
           exclude: PATHS.nodeModules,
-          use: 'happypack/loader?id=js',
+          use: 'happypack/loader?id=scripts',
         },
         {
-          test: /\.(css|scss)$/,
-          include: PATHS.styles,
+          test: /\.(css|scss|sass)$/,
           exclude: PATHS.nodeModules,
+          include: PATHS.src,
           loader: ExtractTextPlugin.extract({
             fallback: 'style-loader',
             use: [
@@ -133,60 +108,50 @@ const commonConfig = merge([
                 loader: 'css-loader',
                 options: {
                   importLoaders: 2,
-                  sourceMap: inDevelopment || inStaging,
+                  sourceMap: true,
                   modules: true,
                   context: path.join(process.cwd(), './src'),
-                  localIdentName: inDevelopment ? '[name]__[local].[hash:base64:5]' : '[hash:base64:5]',
-                  minimize: inStaging || inProduction,
+                  localIdentName: inDevelopment
+                    ? '[name]__[local].[hash:base64:5]'
+                    : '[hash:base64:5]',
+                  minimize: inProduction,
                 },
               },
               {
                 loader: 'postcss-loader',
                 options: {
-                  sourceMap: inDevelopment || inStaging,
-                }
+                  sourceMap: true,
+                },
               },
               {
                 loader: 'sass-loader',
                 options: {
                   outputStyle: 'expanded',
-                  sourceMap: inDevelopment || inStaging,
-                  sourceMapContents: inStaging || inProduction,
+                  sourceMap: true,
+                  sourceMapContents: inProduction,
                 },
               },
             ],
           }),
         },
         {
-          test: webpackIsomorphicToolsPlugin.regular_expression('images'),
+          test: /\.(png|jpe?g|gif)$/,
           exclude: PATHS.nodeModules,
+          include: PATHS.src,
           use: [
             {
-              loader: 'url-loader',
+              loader: 'file-loader',
               options: {
-                limit: 1000,
-                name: 'images/[name].[hash:8].[ext]'
+                name: '[name].[ext]',
+                context: path.join(process.cwd(), './src'),
+                publicPath: '/static/',
+                outputPath: 'images/',
               },
             },
             {
               loader: 'image-webpack-loader',
-              options: {
-                bypassOnDebug: true
-              },
-            }
-          ],
-        },
-        {
-          test: /\.(eot|svg|ttf|woff|woff2)$/,
-          exclude: PATHS.nodeModules,
-          use: [
-            {
-              loader: 'url-loader',
-              options: {
-                limit: 1000,
-                name: 'fonts/[name].[hash:8].[ext]'
-              },
-            }
+              options: { bypassOnDebug: true },
+            },
           ],
         },
       ],
@@ -196,24 +161,34 @@ const commonConfig = merge([
       vm: 'empty',
       net: 'empty',
       tls: 'empty',
-    }
-  }
+    },
+  },
 ]);
 
-// Development Webpack Config
+// Development Configuration
 const developmentConfig = merge([
   {
+    entry: [
+      'babel-polyfill',
+      'react-hot-loader/patch',
+      'webpack-hot-middleware/client?reload=true',
+      PATHS.app,
+    ],
+    cache: true,
+    devtool: 'cheap-module-eval-source-map',
     output: {
       devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
+      pathinfo: true,
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NamedModulesPlugin(),
+      new webpack.IgnorePlugin(/webpack-stats\.json$/),
       new StyleLintPlugin({
         configFile: './stylelint.config.js',
-        syntax: 'scss'
+        syntax: 'scss',
+        failOnError: false,
       }),
-      new webpack.IgnorePlugin(/webpack-stats\.json$/)
     ],
   },
   factor.lintJavaScript({
@@ -221,147 +196,66 @@ const developmentConfig = merge([
     exclude: [PATHS.nodeModules, PATHS.styles],
     options: {
       emitWarning: true,
-      emitError: true
-    }
-  })
-]);
-
-// Staging Config
-const stagingConfig = merge([
-  {
-    recordsPath: path.join(process.cwd(), 'records.json'),
-    plugins: [
-      new HtmlWebpackPlugin({
-        filename: path.join(process.cwd(), './build/index.html'),
-        template: path.resolve(process.cwd(), './src/views/index.ejs'),
-        minify: {
-          collapseWhitespace: false,
-          removeComments: false,
-          removeRedundantAttributes: false
-        }
-      }),
-      new webpack.HashedModuleIdsPlugin(),
-      new webpack.optimize.ModuleConcatenationPlugin()
-    ],
-  },
-  factor.minifyJavaScript({
-    sourceMap: true,
-    compress: {
-      warnings: false,
-      pure_getters: true,
-      unsafe: true,
-      unsafe_comps: true,
-      screw_ie8: true,
-      drop_console: false,
-      drop_debugger: false,
-      conditionals: true,
-      unused: true,
-      comparisons: true,
-      sequences: true,
-      dead_code: true,
-      evaluate: true,
-      if_return: true,
-      join_vars: true
-    }
-  }),
-  factor.extractBundles([
-    {
-      name: 'vendor',
-      minChunks: ({ resource }) => (
-        resource &&
-        resource.indexOf('node_modules') >= 0 &&
-        resource.match(/\.js$/)
-      )
+      emitError: true,
     },
-    {
-      name: 'manifest',
-      minChunks: Infinity
-    }
-  ]),
-  factor.purifyCSS({
-    paths: glob.sync(`${PATHS.app}/**/**/**/*.js`,
-      { nodir: true }
-    ),
-  }),
-  factor.minifyCSS({
-    options: {
-      discardComments: {
-        removeAll: false
-      },
-      safe: true
-    }
   }),
 ]);
 
-// Production Config
+// Production Configuration
 const productionConfig = merge([
   {
+    entry: {
+      main: PATHS.app,
+    },
+    cache: false,
+    devtool: 'hidden-source-map',
     recordsPath: path.join(process.cwd(), 'records.json'),
     plugins: [
-      new HtmlWebpackPlugin({
-        filename: 'index.html',
-        template: path.resolve(process.cwd(), './src/views/index.ejs'),
-        minify: {
-          collapseWhitespace: true,
-          removeComments: true,
-          removeRedundantAttributes: true
-        }
+      new webpack.LoaderOptionsPlugin({
+        options: {
+          minimize: true,
+        },
       }),
-      new webpack.HashedModuleIdsPlugin(),
-      new webpack.optimize.ModuleConcatenationPlugin()
+      new webpack.optimize.ModuleConcatenationPlugin(),
     ],
   },
-  factor.minifyJavaScript({
+  factor.uglifyJavaScript({
     sourceMap: false,
-    compress: {
+    uglifyOptions: {
+      ie8: false,
+      ecma: 8,
+      mangle: true,
+      output: {
+        comments: false,
+        beautify: false,
+      },
+      compress: true,
       warnings: false,
-      pure_getters: true,
-      unsafe: true,
-      unsafe_comps: true,
-      screw_ie8: true,
-      drop_console: true,
-      drop_debugger: true,
-      conditionals: true,
-      unused: true,
-      comparisons: true,
-      sequences: true,
-      dead_code: true,
-      evaluate: true,
-      if_return: true,
-      join_vars: true
-    }
+    },
   }),
   factor.extractBundles([
     {
       name: 'vendor',
-      minChunks: ({ resource }) => (
-        resource &&
-        resource.indexOf('node_modules') >= 0 &&
-        resource.match(/\.js$/)
-      )
+      minChunks: ({ resource }) =>
+        resource && resource.indexOf('node_modules') >= 0 && resource.match(/\.js$/),
     },
     {
       name: 'manifest',
-      minChunks: Infinity
-    }
+      minChunks: Infinity,
+    },
   ]),
-  factor.purifyCSS({
-    paths: glob.sync(`${PATHS.app}/**/**/**/*.js`,
-      { nodir: true }
-    ),
-  }),
   factor.minifyCSS({
     options: {
       discardComments: {
-        removeAll: true
+        removeAll: true,
       },
-      safe: true
-    }
+      safe: true,
+    },
   }),
 ]);
 
 // Webpack Config
-module.exports = (env) => {
+module.exports = env => {
   process.env.BABEL_ENV = env;
 
   if (env === 'production') {

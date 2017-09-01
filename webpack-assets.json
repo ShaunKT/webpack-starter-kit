@@ -1,17 +1,1 @@
-{
-  "javascript": {
-    "main": "/assets/js/main.js"
-  },
-  "styles": {},
-  "assets": {
-    "./src/images/image-placeholder.jpg": "/assets/images/image-placeholder.d2dd7703.jpg",
-    "./src/images/image-placeholder.png": "/assets/images/image-placeholder.1027511d.png",
-    "./src/images/logo.jpg": "/assets/images/logo.e10a567b.jpg",
-    "./src/styles/main.scss": {
-      "_style": "body {\n  background: #eeeeee;\n  background-image: url(/assets/images/image-placeholder.d2dd7703.jpg);\n  background-repeat: no-repeat;\n  background-attachment: fixed;\n  background-position: center;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n      -ms-flex-pack: center;\n          justify-content: center;\n}\n\nbody div {\n  color: #999999;\n}\n\nbody h1 {\n  color: #999999;\n  font-weight: bold;\n}\n\n.class-btn {\n  background: blue;\n  height: 100px;\n  width: 100%;\n}\n\n.Testkajdfsfgsdafsndas {\n  background: blue;\n}\n\n.Bestkaqweffqjsndas {\n  background: blue;\n}\n\n.Zestkabvzcjsndas {\n  background: blue;\n}\n"
-    }
-  },
-  "webpack": {
-    "version": "3.5.5"
-  }
-}
+{"javascript":{"main":"/static/js/main.js","vendor":"/static/js/vendor.js","manifest":"/static/js/manifest.js"},"styles":{"main":"/static/styles/main.css"},"assets":{"./src/images/logo.jpg":"/static/images/logo.jpg","./src/images/image-placeholder.jpg":"/static/images/image-placeholder.jpg","./src/styles/main.scss":"// removed by extract-text-webpack-plugin"},"webpack":{"version":"3.5.5"}}

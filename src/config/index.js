@@ -1,14 +1,17 @@
 module.exports = {
-  host: process.env.NODE_HOST || 'localhost', // Define your host from 'package.json'
+  host: process.env.NODE_HOST || 'localhost',
   port: process.env.PORT,
+  nodeEnv: process.env.NODE_ENV || 'development',
+  inDevelopment: process.env.NODE_ENV === 'development',
+  inProduction: process.env.NODE_ENV === 'production',
   app: {
     htmlAttributes: { lang: 'en' },
-    title: 'React Webpack Starter',
-    titleTemplate: 'React Webpack Starter - %s',
+    title: 'Webpack React Boilerplater',
+    titleTemplate: 'Webpack React Boilerplater - %s',
     meta: [
       {
         name: 'description',
-        content: 'Universal react webpack starter kit.',
+        content: 'Webpack React Boilerplater.',
       },
     ],
   },

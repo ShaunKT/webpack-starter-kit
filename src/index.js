@@ -1,29 +1,25 @@
-/* @flow */
 
-// React
+
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-
-// Redux
 import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter } from 'react-router-redux';
 
-import './styles/main.scss';
-
-// Store and History
 import configureStore from './store/store';
 
+// Get initial state from server-side rendering
 const initialState = window.__INITIAL_STATE__;
 const history = createHistory();
 const store = configureStore(history, initialState);
+const mountNode = document.getElementById('react-view');
 
-// Mount App
-const mountAppById = document.getElementById('mount-app');
+// Styles
+import './styles/main.scss';
 
-const mainApp = () => {
-  const App = require('./client/app.js').default;
+const renderApp = () => {
+  const App = require('./app/app').default;
 
   render(
     <AppContainer>
@@ -33,26 +29,29 @@ const mainApp = () => {
         </ConnectedRouter>
       </Provider>
     </AppContainer>,
-    mountAppById,
+    mountNode,
   );
 };
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  const renderMainApp = () => {
+  const reRenderApp = () => {
     try {
-      mainApp();
+      renderApp();
     } catch (error) {
-      console.log(error);
+      const RedBox = require('redbox-react').default;
+
+      render(<RedBox error={error} />, mountNode);
     }
   };
 
-  module.hot.accept('./client/app.js', () => {
+  module.hot.accept('./app/app', () => {
     setImmediate(() => {
-      unmountComponentAtNode(mountAppById);
-      renderMainApp();
+      // Preventing the hot reloading error from react-router
+      unmountComponentAtNode(mountNode);
+      reRenderApp();
     });
   });
 }
 
-mainApp();
+renderApp();

@@ -1,9 +1,14 @@
-// Webpack Module Configs
+// Webpack Module Configuration
+
+// Libs
+const path = require('path');
 const webpack = require('webpack');
-const PurifyCSSPlugin = require('purifycss-webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin'); // eslint-disable-line
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
+
+// Webpack Plugins
+const PurifyCSSPlugin = require('purifycss-webpack');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 // == Javascript == //
 // Javascript Linter
@@ -12,73 +17,56 @@ exports.lintJavaScript = ({ include, exclude, options }) => ({
     rules: [
       {
         test: /\.(js|jsx)$/,
-        include,
-        exclude,
         enforce: 'pre',
-        loader: 'eslint-loader',
-        options
-      }
-    ]
-  }
-});
-
-// Babel Loader
-exports.loadJavaScript = ({ include, exclude }) => ({
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
         include,
         exclude,
-        use: 'happypack/loader?id=js'
-      }
-    ]
-  }
+        loader: 'eslint-loader',
+        options,
+      },
+    ],
+  },
 });
 
 // Minify JavaSscript Loader
-exports.minifyJavaScript = ({ sourceMap, compress }) => ({
+// exports.minifyJavaScript = ({ mangle, sourceMap, compress }) => ({
+//   plugins: [
+//     new webpack.optimize.UglifyJSPlugin({
+//       minimize: true,
+//       mangle,
+//       sourceMap,
+//       compress,
+//     }),
+//   ],
+// });
+
+// Minify JavaSscript
+exports.uglifyJavaScript = ({ uglifyOptions, sourceMap }) => ({
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      mangle: true,
+    new UglifyJSPlugin({
+      parallel: {
+        cache: true,
+        workers: 2,
+      },
       sourceMap,
-      compress
-    })
-  ]
+      uglifyOptions,
+    }),
+  ],
 });
 
 // Bundle Splitting
-exports.extractBundles = (bundles) => ({
-  plugins: bundles.map((bundle) => (
-    new webpack.optimize.CommonsChunkPlugin(bundle)
-  ))
+exports.extractBundles = bundles => ({
+  plugins: bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle)),
 });
 
 // == Styles == //
-// SASS, Autoprefixer
-exports.loadCSS = ({ include, exclude } = {}) => ({
-  module: {
-    rules: [
-      {
-        test: /\.(css|scss|sass)$/,
-        include,
-        exclude,
-        use: 'happypack/loader?id=styles'
-      }
-    ]
-  }
-});
-
-
 // Remove unused css classes
 exports.purifyCSS = ({ paths }) => ({
   plugins: [
     new PurifyCSSPlugin({
       paths,
-      minimize: true
-    })
-  ]
+      minimize: true,
+    }),
+  ],
 });
 
 // Minify Styles
@@ -87,26 +75,28 @@ exports.minifyCSS = ({ options }) => ({
     new OptimizeCSSAssetsPlugin({
       cssProcessor: cssnano,
       cssProcessorOptions: options,
-      canPrint: true
-    })
-  ]
+      canPrint: true,
+    }),
+  ],
 });
 
-// == Environment Variables == //
-// Setting process.env
-exports.setFreeVariable = (key, value) => {
-  const env = {};
-  env[key] = JSON.stringify(value);
-
-  return {
-    plugins: [
-      new webpack.DefinePlugin(env)
-    ]
-  };
-};
-
-// == Server == //
-// Source Maps
-exports.generateSourceMaps = ({ type }) => ({
-  devtool: type
+// Webpack Dev Server
+exports.devServer = ({ host, port } = {}) => ({
+  devServer: {
+    historyApiFallback: true,
+    stats: 'errors-only',
+    hotOnly: true,
+    hot: true,
+    contentBase: path.join(process.cwd(), './build/'),
+    inline: true,
+    host,
+    port,
+    overlay: {
+      warnings: false,
+      errors: true,
+    },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  },
 });

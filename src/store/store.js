@@ -1,4 +1,7 @@
-/* @flow */
+
+
+// Configuration
+import { inDevelopment } from '../config/index';
 
 // Redux
 import { routerMiddleware } from 'react-router-redux';
@@ -12,15 +15,13 @@ import axios from 'axios';
 import rootReducer from '../reducers/reducers';
 
 export default (history, initialState = {}) => {
-  const middlewares = [
-    thunk.withExtraArgument(axios),
-    routerMiddleware(history),
-  ];
+  const middlewares = [thunk.withExtraArgument(axios), routerMiddleware(history)];
 
   const enhancers = [
     applyMiddleware(...middlewares),
-    __DEV__ && typeof window === 'object' && typeof window.devToolsExtension !== 'undefined' ?
-      window.devToolsExtension() : f => f,
+    inDevelopment && typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
+      ? window.devToolsExtension()
+      : f => f,
   ];
 
   const store = createStore(rootReducer, initialState, compose(...enhancers));

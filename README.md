@@ -1,7 +1,6 @@
 ## webpack-starter-kit
 
-This is a basic webpack 2 starter kit for react, react router V4 and sass.
-
+This is a basic webpack 3 starter kit for react, react router and sass.
 
 
 ## Getting started
@@ -9,8 +8,6 @@ This is a basic webpack 2 starter kit for react, react router V4 and sass.
 To get started you need to run `yarn install`.
 
 **Note:**  This setup was created using Node v8.1.3
-
-
 
 
 ## Setting up Linters
@@ -21,13 +18,13 @@ Setting up the linter packages helps keep the css/sass styles and javascript con
 #### 1) Style Linters
 
   - Stylinter = [https://stylelint.io/]
-  
+
   - Airbnb Styles - [https://github.com/airbnb/css]
-  
+
   - BEM = [http://getbem.com/introduction/]
 
   - setup vscode = [https://github.com/shinnn/vscode-stylelint]
-  
+
   - setup atom = [https://atom.io/packages/linter-stylelint]
 
 
@@ -35,85 +32,71 @@ Setting up the linter packages helps keep the css/sass styles and javascript con
 #### 2) Javascript/JSX Linters
 
   - Airbnb Linter = [https://github.com/airbnb/javascript]
-  
+
   - Eslint react plugin  = [https://www.npmjs.com/package/eslint-plugin-react]
 
   - setup vscode = install extension eslint
-  
+
   - setup atom = `apm install linter-eslint`
 
 
 
-## Webpack 
+## Webpack
 
 Once you have completed the setup run one of the 4 webpack.configs ENV's (Development, Staging, Production, Server).
 
 
 1) **Development** runs on Dev Server localhost:8080 with Hot Module Replacement
 
-  `yarn start:wds`  runs webpack dev server
-  
-  `yarn start:dev`  runs babel-node server
-  
-
-2) **Staging** builds minified files with source maps, debugs and console.logs.
-
-  `yarn build:staging`
-  
-
-3) **Production** builds minified files with removed source maps, debugs and console.logs.
-
-  `yarn build:production`
+  `yarn start` runs nodemon ./index.js --exec babel-node
 
 
-4) **Server Side Rendering** test build server rendering. (Not you have to run a NGINX server)
+2) **Build Production**
 
-  `yarn start:prod`
+  `yarn build` runs yarn build:client && yarn build:server
+
+3) **Test Production**
+
+  `yarn start:production` runs yarn build && yarn run:production
 
 
-5) **Stats** builds your stats.json file in the root directory
+4) **Server Side Rendering**
 
-  `yarn stats`
+  `yarn build:server` runs yarn clean:server && better-npm-run build:server
 
+4) **Clean**
 
-6) **Lint Javascript files**
-
-  `yarn js:lint`
+  `yarn clean:all` runs yarn clean:client && yarn clean:server
 
 
 
 ## Folder Structure
 
- 
+    |-- index.js
     |-- src
     |   |-- index.js
     |   |
-    |   |-- client
-    |   |  |-- client-app.js
+    |   |-- app
+    |   |  |-- app.js
     |   |
     |   |-- server
-    |   |  |-- index.js
-    |   |  |-- server-app.js
+    |   |  |-- server.js
     |   |
     |   |-- elements
     |   |  |-- components
     |   |  |-- container
-    |   |  |-- naviagtion
-    |   |  |-- ui
     |   |
     |   |-- routes
-    |   |  |-- client-routes
-    |   |  |-- server-routes
     |   |  |-- routes.js
     |   |
     |   |-- actions
-    |   |  |-- hello.js
+    |   |  |-- actions.js
     |   |
     |   |-- reducers
-    |   |  |-- hello.js
+    |   |  |-- reducers.js
     |   |
     |   |-- stores
-    |   |  |-- hello-store.js 
+    |   |  |-- store.js
     |   |
     |   |-- images
     |   |  |-- img.png
@@ -128,15 +111,19 @@ Once you have completed the setup run one of the 4 webpack.configs ENV's (Develo
     |   |  |-- ui
     |   |
     |   |-- views
-    |   |  |-- index.ejs
+    |   |  |-- react-html.js
     |   
     |-- package.json
-    |-- webpack.config.js
-    |-- webpack.configs
-    |   |-- webpack.modules.js 
+    |-- webpack
+    |   |-- config.js
+    |   |-- webpack.client.babel.js
+    |   |-- webpack.server.babel.js
+    |   |-- webpack.modules.config.js
+    |   |-- webpackIsomorphicConfig.config.js
     |   
     |-- .babelrc
-    |-- .gitignore 
+    |-- .gitignore
     |-- .eslintrc.js
-    |-- stylelint.config.js 
+    |-- stylelint.config.js
     |-- postcss.config.js
+    |-- nodemon.json
