@@ -20,8 +20,8 @@
 	"homepage": "https://github.com/ShaunKT/webpack-starter-kit",
 	"scripts": {
 		"start": "better-npm-run start",
-		"start:production": "yarn build && yarn run:production",
-		"run:production": "better-npm-run start:prod",
+		"start:production": "yarn build && yarn start:prod",
+		"start:prod": "better-npm-run start:prod",
 		"build": "yarn build:client && yarn build:server",
 		"build:client": "yarn clean:client && better-npm-run build:client",
 		"build:server": "yarn clean:server && better-npm-run build:server",
@@ -38,7 +38,7 @@
 				"PORT": 3000
 			}
 		},
-		"run:production": {
+		"start:prod": {
 			"command": "node ./build/server.js",
 			"env": {
 				"NODE_PATH": "./src",
