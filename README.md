@@ -12,7 +12,7 @@ To get started you need to run `yarn install`.
 
 ## Setting up Linters
 
-Setting up the linter packages helps keep the css/sass styles and javascript consistant in the project.
+Setting up the linter packages helps keep the css/sass styles and javascript consistent in the project.
 
 
 #### 1) Style Linters
@@ -46,27 +46,38 @@ Setting up the linter packages helps keep the css/sass styles and javascript con
 Once you have completed the setup run one of the 4 webpack.configs ENV's (Development, Staging, Production, Server).
 
 
-1) **Development** runs on Dev Server localhost:8080 with Hot Module Replacement
+1) **Development** (Hot Module Replacement and Linters)
 
-  `yarn start` runs nodemon ./index.js --exec babel-node
+  Terminal One
+  run `yarn start` = runs nodemon --ignore build --exec babel-node
+
+  Terminal Two
+  run `yarn start:wds` = runs the Webpack Dev Server localhost:3030
 
 
-2) **Build Production**
+2) **Staging**
 
-  `yarn build` runs yarn build:client && yarn build:server
+  run `build:staging` = removes the old build folder and then runs a new staging and server build
 
-3) **Test Production**
 
-  `yarn start:production` runs yarn build && yarn run:production
+3) **Production**
+
+  run `build:production` = removes the old build folder and then runs a new production and server build
 
 
 4) **Server Side Rendering**
 
-  `yarn build:server` runs yarn clean:server && better-npm-run build:server
+  run `yarn build:server` removes the old server file and then runs a new server build
 
-4) **Clean**
 
-  `yarn clean:all` runs yarn clean:client && yarn clean:server
+5) **Run staging/production build with Node**
+
+run `yarn run:node` runs the staging or production build on your local with node
+
+
+6) **Clean**
+
+  run `yarn clean` removes the old build folder
 
 
 

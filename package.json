@@ -11,7 +11,13 @@
 		"type": "git",
 		"url": "https://github.com/ShaunKT/webpack-starter-kit"
 	},
-	"keywords": ["hmr", "webpack", "SASS", "react", "React Router"],
+	"keywords": [
+		"hmr",
+		"webpack",
+		"SASS",
+		"react",
+		"React Router"
+	],
 	"author": "Shaun Townsend (https://github.com/ShaunKT)",
 	"license": "MIT",
 	"bugs": {
@@ -19,34 +25,24 @@
 	},
 	"homepage": "https://github.com/ShaunKT/webpack-starter-kit",
 	"scripts": {
-		"dev:wds": "webpack-dev-server --config ./webpack/webpack.client.babel.js",
-		"dev:start": "better-npm-run start:nodemon",
-		"start": "better-npm-run start",
-		"start:production": "yarn build && yarn start:prod",
-		"start:prod": "better-npm-run start:prod",
-		"build": "yarn build:client && yarn build:server",
-		"build:client": "yarn clean && better-npm-run build:client",
-		"build:server": "yarn clean && better-npm-run build:server",
+		"start": "better-npm-run build:development",
+		"start:wds": "webpack-dev-server --config ./webpack/webpack.client.babel.js",
+		"build:staging": "yarn clean && better-npm-run client:staging && better-npm-run server",
+		"build:production": "yarn clean && better-npm-run client:production && better-npm-run server",
+		"build:server": "better-npm-run clean:server && better-npm-run server",
+		"run:node": "better-npm-run start:node",
 		"clean": "better-npm-run clean"
 	},
 	"betterScripts": {
-		"start": {
-			"command": "nodemon ./index.js --exec babel-node",
-			"env": {
-				"NODE_PATH": "./src",
-				"NODE_ENV": "development",
-				"PORT": 3000
-			}
-		},
-		"start:nodemon": {
-			"command": "nodemon --ignore build  --exec babel-node ./src/server/server.js",
+		"build:development": {
+			"command": "nodemon --ignore build --exec babel-node ./src/server/server.js",
 			"env": {
 				"NODE_PATH": "./src",
 				"NODE_ENV": "development",
 				"PORT": 4000
 			}
 		},
-		"start:prod": {
+		"start:node": {
 			"command": "node ./build/server.js",
 			"env": {
 				"NODE_PATH": "./src",
@@ -54,15 +50,23 @@
 				"PORT": 8080
 			}
 		},
-		"build:client": {
-			"command":
-				"webpack --env production --progress --hide-modules --config ./webpack/webpack.client.babel.js",
+		"client:staging": {
+			"command": "webpack --env staging --progress --hide-modules --config ./webpack/webpack.client.babel.js",
 			"env": {
 				"NODE_ENV": "production"
 			}
 		},
-		"build:server": {
+		"client:production": {
+			"command": "webpack --env production --progress --hide-modules --config ./webpack/webpack.client.babel.js",
+			"env": {
+				"NODE_ENV": "production"
+			}
+		},
+		"server": {
 			"command": "webpack --progress --hide-modules --config ./webpack/webpack.server.babel.js"
+		},
+		"clean:server": {
+			"command": "rimraf ./build/server.js"
 		},
 		"clean": {
 			"command": "rimraf ./build"
@@ -89,8 +93,7 @@
 		"redbox-react": "^1.5.0",
 		"redux": "^3.7.2",
 		"redux-thunk": "^2.2.0",
-		"serialize-javascript": "^1.4.0",
-		"serve-favicon": "^2.4.3"
+		"serialize-javascript": "^1.4.0"
 	},
 	"devDependencies": {
 		"autoprefixer": "^7.1.2",

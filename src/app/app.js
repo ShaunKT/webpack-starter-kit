@@ -28,10 +28,10 @@ export default () => {
     <div>
       <Helmet {...config.app} />
       <div>
-        <img src={require('../images/logo.jpg')} alt="Logo" role="presentation" />
-        <h1>{config.app.title} ajshkajsdhasjh</h1>
-        <p>This is a NEW TEST FOR THE BEST</p>
-        <img src={require('../images/image-placeholder.jpg')} alt="Placeholder" />
+        <img src={require('../assets/images/logo.jpg')} alt="Logo" role="presentation" />
+        <h1>{config.app.title}</h1>
+        <p>This has HMR</p>
+        <img src={require('../assets/images/image-placeholder.jpg')} alt="Placeholder" />
       </div>
       <hr />
       <Switch>{routes.map(route => routeWithSubRoutes(route))}</Switch>

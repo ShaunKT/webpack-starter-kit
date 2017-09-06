@@ -10,8 +10,6 @@ const PurifyCSSPlugin = require('purifycss-webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 // == Javascript == //
 // Javascript Linter
 exports.lintJavaScript = ({ include, exclude, options }) => ({
@@ -22,7 +20,6 @@ exports.lintJavaScript = ({ include, exclude, options }) => ({
         include,
         exclude,
         enforce: 'pre',
-
         loader: 'eslint-loader',
         options,
       },
@@ -30,50 +27,12 @@ exports.lintJavaScript = ({ include, exclude, options }) => ({
   },
 });
 
-// Babel Loader
-exports.loadJavaScript = ({ include, exclude }) => ({
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        include,
-        exclude,
-        use: 'happypack/loader?id=js',
-      },
-    ],
-  },
-});
-
-// Minify JavaSscript Loader
-exports.minifyJavaScript = () => ({
-  plugins: [
-    new webpack.optimize.UglifyJSPlugin({
-      mangle: false,
-      sourceMap: false,
-      compress: {
-        warnings: false,
-        drop_console: true,
-        drop_debugger: true,
-        screw_ie8: true,
-        conditionals: true,
-        unused: true,
-        comparisons: true,
-        sequences: true,
-        dead_code: true,
-        evaluate: true,
-        if_return: true,
-        join_vars: true,
-      },
-    }),
-  ],
-});
-
 // Bundle Splitting
 exports.extractBundles = bundles => ({
   plugins: bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle)),
 });
 
-// Minify JavaSscript
+// Minify JavaSscript Loader
 exports.uglifyJavaScript = ({ uglifyOptions, sourceMap }) => ({
   plugins: [
     new UglifyJSPlugin({
@@ -88,6 +47,20 @@ exports.uglifyJavaScript = ({ uglifyOptions, sourceMap }) => ({
 });
 
 // == Styles == //
+// SASS, Autoprefixer
+exports.loadCSS = ({ include, exclude } = {}) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(css|scss|sass)$/,
+        include,
+        exclude,
+        use: 'happypack/loader?id=styles',
+      },
+    ],
+  },
+});
+
 // Remove unused css classes
 exports.purifyCSS = ({ paths }) => ({
   plugins: [
@@ -98,6 +71,74 @@ exports.purifyCSS = ({ paths }) => ({
   ],
 });
 
+// Minify Styles
+exports.minifyCSS = ({ options }) => ({
+  plugins: [
+    new OptimizeCSSAssetsPlugin({
+      cssProcessor: cssnano,
+      cssProcessorOptions: options,
+      canPrint: true,
+    }),
+  ],
+});
+
+// == Assets == //
+// Url Loaders
+exports.urlLoader = ({ include, exclude, options } = {}) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(jpe?g|png|gif|ico)$/,
+        include,
+        exclude,
+
+        use: [
+          {
+            loader: 'url-loader',
+            options,
+          },
+          'image-webpack-loader',
+        ],
+      },
+    ],
+  },
+});
+
+// File Loaders
+exports.fileLoader = ({ include, exclude, options } = {}) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(jpe?g|png|gif|ico)$/,
+        include,
+        exclude,
+        use: [
+          {
+            loader: 'file-loader',
+            options,
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: { bypassOnDebug: true },
+          },
+        ],
+      },
+    ],
+  },
+});
+
+// == Environment Variables == //
+// Setting process.env
+exports.setFreeVariable = (key, value) => {
+  const env = {};
+  env[key] = JSON.stringify(value);
+
+  return {
+    plugins: [new webpack.DefinePlugin(env)],
+  };
+};
+
+// == Servers == //
 // Webpack Dev Server
 exports.devServer = ({ host, port } = {}) => ({
   devServer: {
@@ -118,98 +159,3 @@ exports.devServer = ({ host, port } = {}) => ({
     },
   },
 });
-
-// == Javascript == //
-
-// == Styles == //
-// SASS, Autoprefixer
-exports.loadCSS = ({ include, exclude } = {}) => ({
-  module: {
-    rules: [
-      {
-        test: /\.(css|scss|sass)$/,
-        include,
-        exclude,
-        use: 'happypack/loader?id=styles',
-      },
-    ],
-  },
-});
-
-// Extract CSS to extrenal file "stylesheets/styles.css"
-exports.extractCSS = ({ include, exclude }) => {
-  const plugin = new ExtractTextPlugin({
-    filename: 'stylesheet/styles.css',
-  });
-
-  return {
-    module: {
-      rules: [
-        {
-          test: /\.(css|scss|sass)$/,
-          include,
-          exclude,
-
-          use: plugin.extract({
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  modules: true,
-                  importLoaders: 1,
-                },
-              },
-              'postcss-loader',
-              'sass-loader',
-            ],
-            fallback: 'style-loader',
-          }),
-        },
-      ],
-    },
-    plugins: [plugin],
-  };
-};
-
-// Minify Styles
-exports.minifyCSS = ({ options }) => ({
-  plugins: [
-    new OptimizeCSSAssetsPlugin({
-      cssProcessor: cssnano,
-      cssProcessorOptions: options,
-      canPrint: true,
-    }),
-  ],
-});
-
-// Image Loader
-exports.loadImages = ({ include, exclude, options } = {}) => ({
-  module: {
-    rules: [
-      {
-        test: /\.(jpe?g|png|gif|svg|ico)$/,
-        include,
-        exclude,
-
-        use: [
-          {
-            loader: 'url-loader',
-            options,
-          },
-          'image-webpack-loader',
-        ],
-      },
-    ],
-  },
-});
-
-// == Environment Variables == //
-// Setting process.env
-exports.setFreeVariable = (key, value) => {
-  const env = {};
-  env[key] = JSON.stringify(value);
-
-  return {
-    plugins: [new webpack.DefinePlugin(env)],
-  };
-};

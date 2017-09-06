@@ -13,9 +13,9 @@ const history = createHistory();
 const store = configureStore(history, initialState);
 const mountNode = document.getElementById('react-view');
 
-// // Favicon
-// require('./assets/favicons/favicon.ico');
-//
+// Favicon
+require('./assets/favicons/favicon.ico');
+
 // Styles
 import './styles/main.scss';
 

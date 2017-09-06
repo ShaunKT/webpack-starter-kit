@@ -2,6 +2,7 @@
 
 // Libs
 const path = require('path');
+const glob = require('glob');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HappyPack = require('happypack');
@@ -9,6 +10,7 @@ const HappyPack = require('happypack');
 // Webpack Plugins
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // Happy Pack Thread
 const happyThreadPool = HappyPack.ThreadPool({ size: 4 });
@@ -17,7 +19,7 @@ const happyThreadPool = HappyPack.ThreadPool({ size: 4 });
 const factor = require('./webpack.modules.config');
 
 // Environment Target
-import { nodeEnv, inDevelopment, inProduction } from '../src/config/index';
+import { nodeEnv, inDevelopment } from '../src/config/index';
 
 // Directory Paths
 const PATHS = {
@@ -33,20 +35,20 @@ const commonConfig = merge([
   {
     name: 'client',
     target: 'web',
-    context: path.join(process.cwd()),
-    output: {
-      path: path.join(process.cwd(), './build/static'),
-      publicPath: '/static/',
-      filename: 'js/[name].js',
-      chunkFilename: 'js/[name].js',
-    },
     resolve: {
       modules: ['src', 'node_modules'],
       descriptionFiles: ['package.json'],
-      moduleExtensions: ['-loader'],
       extensions: ['.js', '.jsx', '.json', '.scss', '.css'],
     },
+    output: {
+      path: path.join(process.cwd(), './build/static'),
+      filename: 'js/[name].js',
+      chunkFilename: 'js/[name].js',
+    },
     plugins: [
+      new webpack.NoEmitOnErrorsPlugin(),
+      new webpack.HashedModuleIdsPlugin(),
+      new webpack.optimize.ModuleConcatenationPlugin(),
       new HappyPack({
         id: 'scripts',
         threadPool: happyThreadPool,
@@ -60,28 +62,6 @@ const commonConfig = merge([
           },
         ],
       }),
-      new ExtractTextPlugin({
-        filename: 'styles/[name].css',
-        allChunks: true,
-        disable: inDevelopment,
-        ignoreOrder: true,
-      }),
-      new webpack.EnvironmentPlugin({
-        NODE_ENV: JSON.stringify(nodeEnv),
-      }),
-      new webpack.DefinePlugin({
-        __CLIENT__: true,
-        __SERVER__: false,
-        __DEV__: inDevelopment,
-      }),
-      new webpack.LoaderOptionsPlugin({
-        options: {
-          context: '/',
-          debug: inDevelopment,
-        },
-      }),
-      new webpack.NoEmitOnErrorsPlugin(),
-      new webpack.HashedModuleIdsPlugin(),
     ],
     module: {
       rules: [
@@ -90,63 +70,6 @@ const commonConfig = merge([
           include: PATHS.src,
           exclude: PATHS.nodeModules,
           use: 'happypack/loader?id=scripts',
-        },
-        {
-          test: /\.(css|scss|sass)$/,
-          exclude: PATHS.nodeModules,
-          include: PATHS.src,
-          loader: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  importLoaders: 2,
-                  sourceMap: true,
-                  modules: true,
-                  context: path.join(process.cwd(), './src'),
-                  localIdentName: inDevelopment
-                    ? '[name]__[local].[hash:base64:5]'
-                    : '[hash:base64:5]',
-                  minimize: inProduction,
-                },
-              },
-              {
-                loader: 'postcss-loader',
-                options: {
-                  sourceMap: true,
-                },
-              },
-              {
-                loader: 'sass-loader',
-                options: {
-                  outputStyle: 'expanded',
-                  sourceMap: true,
-                  sourceMapContents: inProduction,
-                },
-              },
-            ],
-          }),
-        },
-        {
-          test: /\.(png|jpe?g|gif)$/,
-          exclude: PATHS.nodeModules,
-          include: PATHS.src,
-          use: [
-            {
-              loader: 'file-loader',
-              options: {
-                name: '[name].[ext]',
-                context: path.join(process.cwd(), './src'),
-                publicPath: '/static/',
-                outputPath: 'images/',
-              },
-            },
-            {
-              loader: 'image-webpack-loader',
-              options: { bypassOnDebug: true },
-            },
-          ],
         },
       ],
     },
@@ -162,26 +85,45 @@ const commonConfig = merge([
 // Development Configuration
 const developmentConfig = merge([
   {
+    cache: true,
+    devtool: 'cheap-module-eval-source-map',
     entry: [
       'babel-polyfill',
       'react-hot-loader/patch',
-      'webpack-hot-middleware/client?reload=true',
+      'webpack-dev-server/client?http://localhost:3030',
       PATHS.app,
     ],
-    cache: true,
-    devtool: 'cheap-module-eval-source-map',
     output: {
-      devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
-      pathinfo: true,
+      publicPath: 'http://localhost:3030/',
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NamedModulesPlugin(),
       new webpack.IgnorePlugin(/webpack-stats\.json$/),
+      new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: './src/views/index.ejs',
+      }),
       new StyleLintPlugin({
         configFile: './stylelint.config.js',
         syntax: 'scss',
         failOnError: false,
+      }),
+      new HappyPack({
+        id: 'styles',
+        threadPool: happyThreadPool,
+        loaders: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 2,
+            },
+          },
+          'postcss-loader',
+          'sass-loader',
+        ],
       }),
     ],
   },
@@ -189,30 +131,215 @@ const developmentConfig = merge([
     include: PATHS.app,
     exclude: [PATHS.nodeModules, PATHS.styles],
     options: {
-      emitWarning: true,
+      emitWarning: false,
       emitError: true,
     },
   }),
+  factor.loadCSS(),
+  factor.fileLoader({
+    exclude: PATHS.nodeModules,
+    include: PATHS.src,
+  }),
+  factor.devServer({
+    port: 3030,
+  }),
 ]);
 
-// Production Configuration
-const productionConfig = merge([
+// Staging Configuration
+const stagingConfig = merge([
   {
+    cache: false,
+    devtool: 'source-map',
+    context: path.join(process.cwd()),
     entry: {
       main: PATHS.app,
     },
-    cache: false,
-    devtool: 'hidden-source-map',
-    recordsPath: path.join(process.cwd(), 'records.json'),
+    output: {
+      publicPath: '/static/',
+    },
     plugins: [
       new webpack.LoaderOptionsPlugin({
         options: {
           minimize: true,
         },
       }),
-      new webpack.optimize.ModuleConcatenationPlugin(),
+      new ExtractTextPlugin({
+        filename: 'styles/[name].css',
+        allChunks: true,
+        ignoreOrder: true,
+      }),
+      new webpack.EnvironmentPlugin({
+        NODE_ENV: JSON.stringify(nodeEnv),
+      }),
     ],
+    module: {
+      rules: [
+        {
+          test: /\.(css|scss|sass)$/,
+          exclude: PATHS.nodeModules,
+          include: PATHS.styles,
+          loader: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  importLoaders: 2,
+                  sourceMap: true,
+                  modules: true,
+                  context: path.join(process.cwd(), './src'),
+                  localIdentName: '[hash:base64:5]',
+                  minimize: false,
+                },
+              },
+              {
+                loader: 'postcss-loader',
+                options: {
+                  sourceMap: true,
+                },
+              },
+              {
+                loader: 'sass-loader',
+                options: {
+                  outputStyle: 'expanded',
+                  sourceMap: true,
+                  sourceMapContents: true,
+                },
+              },
+            ],
+          }),
+        },
+      ],
+    },
   },
+  factor.fileLoader({
+    exclude: PATHS.nodeModules,
+    include: PATHS.src,
+    options: {
+      name: '[name].[ext]',
+      context: path.join(process.cwd(), './src'),
+      publicPath: '/static/',
+      outputPath: 'images/',
+    },
+  }),
+  factor.uglifyJavaScript({
+    sourceMap: true,
+    uglifyOptions: {
+      ie8: false,
+      ecma: 8,
+      mangle: true,
+      output: {
+        comments: true,
+        beautify: true,
+      },
+      compress: true,
+      warnings: true,
+    },
+  }),
+  factor.purifyCSS({
+    paths: glob.sync(
+      `${PATHS.src}/**/**/**/*.js`, { nodir: true }
+    ),
+  }),
+  factor.minifyCSS({
+    options: {
+      discardComments: {
+        removeAll: false,
+      },
+      safe: true,
+    },
+  }),
+  factor.extractBundles([
+    {
+      name: 'vendor',
+      minChunks: ({ resource }) =>
+        resource && resource.indexOf('node_modules') >= 0 && resource.match(/\.js$/),
+    },
+    {
+      name: 'manifest',
+      minChunks: Infinity,
+    },
+  ]),
+]);
+
+// Production Configuration
+const productionConfig = merge([
+  {
+    cache: false,
+    devtool: 'hidden-source-map',
+    context: path.join(process.cwd()),
+    recordsPath: path.join(process.cwd(), 'records.json'),
+    entry: {
+      main: PATHS.app,
+    },
+    output: {
+      publicPath: '/static/',
+    },
+    plugins: [
+      new webpack.LoaderOptionsPlugin({
+        options: {
+          minimize: true,
+        },
+      }),
+      new ExtractTextPlugin({
+        filename: 'styles/[name].css',
+        allChunks: true,
+        ignoreOrder: true,
+      }),
+      new webpack.EnvironmentPlugin({
+        NODE_ENV: JSON.stringify(nodeEnv),
+      }),
+    ],
+    module: {
+      rules: [
+        {
+          test: /\.(css|scss|sass)$/,
+          exclude: PATHS.nodeModules,
+          include: PATHS.styles,
+          loader: ExtractTextPlugin.extract({
+            fallback: 'style-loader',
+            use: [
+              {
+                loader: 'css-loader',
+                options: {
+                  importLoaders: 2,
+                  sourceMap: false,
+                  modules: true,
+                  context: path.join(process.cwd(), './src'),
+                  localIdentName: '[hash:base64:5]',
+                  minimize: true,
+                },
+              },
+              {
+                loader: 'postcss-loader',
+                options: {
+                  sourceMap: false,
+                },
+              },
+              {
+                loader: 'sass-loader',
+                options: {
+                  outputStyle: 'expanded',
+                  sourceMap: false,
+                  sourceMapContents: false,
+                },
+              },
+            ],
+          }),
+        },
+      ],
+    },
+  },
+  factor.fileLoader({
+    exclude: PATHS.nodeModules,
+    include: PATHS.src,
+    options: {
+      name: '[name].[ext]',
+      context: path.join(process.cwd(), './src'),
+      publicPath: '/static/',
+      outputPath: 'images/',
+    },
+  }),
   factor.uglifyJavaScript({
     sourceMap: false,
     uglifyOptions: {
@@ -227,6 +354,19 @@ const productionConfig = merge([
       warnings: false,
     },
   }),
+  factor.purifyCSS({
+    paths: glob.sync(
+      `${PATHS.src}/**/**/**/*.js`, { nodir: true }
+    ),
+  }),
+  factor.minifyCSS({
+    options: {
+      discardComments: {
+        removeAll: true,
+      },
+      safe: true,
+    },
+  }),
   factor.extractBundles([
     {
       name: 'vendor',
@@ -238,19 +378,15 @@ const productionConfig = merge([
       minChunks: Infinity,
     },
   ]),
-  factor.minifyCSS({
-    options: {
-      discardComments: {
-        removeAll: true,
-      },
-      safe: true,
-    },
-  }),
 ]);
 
 // Webpack Config
 module.exports = env => {
   process.env.BABEL_ENV = env;
+
+  if (env === 'staging') {
+    return merge(commonConfig, stagingConfig);
+  }
 
   if (env === 'production') {
     return merge(commonConfig, productionConfig);
