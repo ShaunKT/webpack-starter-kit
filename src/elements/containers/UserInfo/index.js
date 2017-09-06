@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import * as action from '../../actions/users';
+import * as action from '../../../actions/users';
 import UserCard from '../../components/UserCard';
 
 // Export this for unit testing more easily
@@ -21,14 +21,14 @@ export class UserInfo extends PureComponent {
    const userInfoById = userInfo[params.id];
 
    if (!userInfoById || userInfoById.readyStatus === action.USER_REQUESTING) {
-     return <p>Loading...</p>;
+     return (<p>Loading...</p>);
    }
 
    if (userInfoById.readyStatus === action.USER_FAILURE) {
-     return <p>Oops, Failed to load info!</p>;
+     return (<p>Oops, Failed to load info!</p>);
    }
 
-   return <UserCard info={userInfoById.info} />;
+   return (<UserCard info={userInfoById.info} />);
  };
 
  render() {

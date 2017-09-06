@@ -1,5 +1,3 @@
-
-
 // Libs
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
@@ -30,9 +28,10 @@ export default () => {
     <div>
       <Helmet {...config.app} />
       <div>
-        <img src={require('../images/logo.jpg')} alt="Logo" role="presentation" />
+        <img src={require('../assets/images/logo.jpg')} alt="Logo" role="presentation" />
         <h1>{config.app.title}</h1>
-        <img src={require('../images/image-placeholder.jpg')} alt="Placeholder" />
+        <p>This has HMR</p>
+        <img src={require('../assets/images/image-placeholder.jpg')} alt="Placeholder" />
       </div>
       <hr />
       <Switch>{routes.map(route => routeWithSubRoutes(route))}</Switch>

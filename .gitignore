@@ -1,6 +1,7 @@
-dist
+build
 .vscode
 node_modules
 .sass-cach
 .DS_store
 .eslintcache
+records.json

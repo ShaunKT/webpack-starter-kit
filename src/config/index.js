@@ -6,12 +6,12 @@ module.exports = {
   inProduction: process.env.NODE_ENV === 'production',
   app: {
     htmlAttributes: { lang: 'en' },
-    title: 'Webpack React Boilerplater',
-    titleTemplate: 'Webpack React Boilerplater - %s',
+    title: 'Webpack React Boilerplater Test',
+    titleTemplate: 'Webpack React Boilerplater Test - %s',
     meta: [
       {
         name: 'description',
-        content: 'Webpack React Boilerplater.',
+        content: 'Webpack React Boilerplater. Test',
       },
     ],
   },

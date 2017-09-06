@@ -17,9 +17,9 @@ exports.lintJavaScript = ({ include, exclude, options }) => ({
     rules: [
       {
         test: /\.(js|jsx)$/,
-        enforce: 'pre',
         include,
         exclude,
+        enforce: 'pre',
         loader: 'eslint-loader',
         options,
       },
@@ -27,19 +27,12 @@ exports.lintJavaScript = ({ include, exclude, options }) => ({
   },
 });
 
-// Minify JavaSscript Loader
-// exports.minifyJavaScript = ({ mangle, sourceMap, compress }) => ({
-//   plugins: [
-//     new webpack.optimize.UglifyJSPlugin({
-//       minimize: true,
-//       mangle,
-//       sourceMap,
-//       compress,
-//     }),
-//   ],
-// });
+// Bundle Splitting
+exports.extractBundles = bundles => ({
+  plugins: bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle)),
+});
 
-// Minify JavaSscript
+// Minify JavaSscript Loader
 exports.uglifyJavaScript = ({ uglifyOptions, sourceMap }) => ({
   plugins: [
     new UglifyJSPlugin({
@@ -53,12 +46,21 @@ exports.uglifyJavaScript = ({ uglifyOptions, sourceMap }) => ({
   ],
 });
 
-// Bundle Splitting
-exports.extractBundles = bundles => ({
-  plugins: bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle)),
+// == Styles == //
+// SASS, Autoprefixer
+exports.loadCSS = ({ include, exclude } = {}) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(css|scss|sass)$/,
+        include,
+        exclude,
+        use: 'happypack/loader?id=styles',
+      },
+    ],
+  },
 });
 
-// == Styles == //
 // Remove unused css classes
 exports.purifyCSS = ({ paths }) => ({
   plugins: [
@@ -80,6 +82,63 @@ exports.minifyCSS = ({ options }) => ({
   ],
 });
 
+// == Assets == //
+// Url Loaders
+exports.urlLoader = ({ include, exclude, options } = {}) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(jpe?g|png|gif|ico)$/,
+        include,
+        exclude,
+
+        use: [
+          {
+            loader: 'url-loader',
+            options,
+          },
+          'image-webpack-loader',
+        ],
+      },
+    ],
+  },
+});
+
+// File Loaders
+exports.fileLoader = ({ include, exclude, options } = {}) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(jpe?g|png|gif|ico)$/,
+        include,
+        exclude,
+        use: [
+          {
+            loader: 'file-loader',
+            options,
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: { bypassOnDebug: true },
+          },
+        ],
+      },
+    ],
+  },
+});
+
+// == Environment Variables == //
+// Setting process.env
+exports.setFreeVariable = (key, value) => {
+  const env = {};
+  env[key] = JSON.stringify(value);
+
+  return {
+    plugins: [new webpack.DefinePlugin(env)],
+  };
+};
+
+// == Servers == //
 // Webpack Dev Server
 exports.devServer = ({ host, port } = {}) => ({
   devServer: {
@@ -87,7 +146,7 @@ exports.devServer = ({ host, port } = {}) => ({
     stats: 'errors-only',
     hotOnly: true,
     hot: true,
-    contentBase: path.join(process.cwd(), './build/'),
+    contentBase: path.resolve(__dirname, '../build'),
     inline: true,
     host,
     port,

@@ -1,8 +1,8 @@
 import { fetchUsersIfNeeded } from '../actions/home';
 import { fetchUserIfNeeded } from '../actions/users';
-import HomePage from '../containers/Home';
-import UserInfoPage from '../containers/UserInfo';
-import NotFoundPage from '../containers/NotFound';
+import HomePage from '../elements/containers/Home';
+import UserInfoPage from '../elements/containers/UserInfo';
+import NotFoundPage from '../elements/containers/NotFound';
 
 export default [
   {

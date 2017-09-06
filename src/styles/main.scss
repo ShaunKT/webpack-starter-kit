@@ -2,8 +2,8 @@
   @import './ui/color-palette';
 
   body {
-    background: #eeeeee;
-    background-image: url('../images/image-placeholder.jpg');
+    background: #450202;
+    background-image: url('../assets/images/image-placeholder.jpg');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
@@ -17,6 +17,11 @@
     h1 {
       color: $colorGrey;
       font-weight: bold;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
     }
   }
 

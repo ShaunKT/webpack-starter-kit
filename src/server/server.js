@@ -2,7 +2,6 @@ import path from 'path';
 import express from 'express';
 import compression from 'compression';
 import helmet from 'helmet';
-import favicon from 'serve-favicon';
 import React from 'react';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter, matchPath } from 'react-router-dom';
@@ -22,8 +21,6 @@ const app = express();
 app.use(helmet());
 // Compress all requests
 app.use(compression());
-
-app.use(favicon(path.join(process.cwd(), './build/favicon.ico')));
 app.use(express.static(path.join(process.cwd(), './build')));
 
 // Run express as webpack dev server
@@ -38,7 +35,10 @@ if (inDevelopment) {
       publicPath: webpackConfig().output.publicPath,
       hot: true,
       noInfo: true,
-      stats: 'errors-only',
+      stats: {
+        colors: true,
+        timings: true
+      },
     }),
   );
 
@@ -47,8 +47,6 @@ if (inDevelopment) {
 
 // Register server-side rendering middleware
 app.get('*', (req, res) => {
-  if (inDevelopment) webpackIsomorphicTools.refresh();
-
   const history = createHistory();
   const store = configureStore(history);
   const renderHtml = (store, htmlContent) => {
@@ -57,12 +55,6 @@ app.get('*', (req, res) => {
 
     return `<!doctype html>${html}`;
   };
-
-  // If __DISABLE_SSR__ = true, disable server side rendering
-  // if (__DISABLE_SSR__) {
-  //   res.send(renderHtml(store));
-  //   return;
-  // }
 
   // Load data on server-side
   const loadBranchData = () => {
