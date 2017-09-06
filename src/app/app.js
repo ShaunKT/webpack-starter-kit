@@ -1,5 +1,3 @@
-
-
 // Libs
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
@@ -31,7 +29,8 @@ export default () => {
       <Helmet {...config.app} />
       <div>
         <img src={require('../images/logo.jpg')} alt="Logo" role="presentation" />
-        <h1>{config.app.title}</h1>
+        <h1>{config.app.title} ajshkajsdhasjh</h1>
+        <p>This is a NEW TEST FOR THE BEST</p>
         <img src={require('../images/image-placeholder.jpg')} alt="Placeholder" />
       </div>
       <hr />

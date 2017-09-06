@@ -19,15 +19,15 @@
 	},
 	"homepage": "https://github.com/ShaunKT/webpack-starter-kit",
 	"scripts": {
+		"dev:wds": "webpack-dev-server --config ./webpack/webpack.client.babel.js",
+		"dev:start": "better-npm-run start:nodemon",
 		"start": "better-npm-run start",
 		"start:production": "yarn build && yarn start:prod",
 		"start:prod": "better-npm-run start:prod",
 		"build": "yarn build:client && yarn build:server",
-		"build:client": "yarn clean:client && better-npm-run build:client",
-		"build:server": "yarn clean:server && better-npm-run build:server",
-		"clean:all": "yarn clean:client && yarn clean:server",
-		"clean:client": "better-npm-run clean:client",
-		"clean:server": "better-npm-run clean:server"
+		"build:client": "yarn clean && better-npm-run build:client",
+		"build:server": "yarn clean && better-npm-run build:server",
+		"clean": "better-npm-run clean"
 	},
 	"betterScripts": {
 		"start": {
@@ -36,6 +36,14 @@
 				"NODE_PATH": "./src",
 				"NODE_ENV": "development",
 				"PORT": 3000
+			}
+		},
+		"start:nodemon": {
+			"command": "nodemon --ignore build  --exec babel-node ./src/server/server.js",
+			"env": {
+				"NODE_PATH": "./src",
+				"NODE_ENV": "development",
+				"PORT": 4000
 			}
 		},
 		"start:prod": {
@@ -56,11 +64,8 @@
 		"build:server": {
 			"command": "webpack --progress --hide-modules --config ./webpack/webpack.server.babel.js"
 		},
-		"clean:client": {
-			"command": "rimraf ./build/static"
-		},
-		"clean:server": {
-			"command": "rimraf ./build/server.js ./build/server.js.map"
+		"clean": {
+			"command": "rimraf ./build"
 		}
 	},
 	"dependencies": {
@@ -85,8 +90,7 @@
 		"redux": "^3.7.2",
 		"redux-thunk": "^2.2.0",
 		"serialize-javascript": "^1.4.0",
-		"serve-favicon": "^2.4.3",
-		"webpack-isomorphic-tools": "^3.0.3"
+		"serve-favicon": "^2.4.3"
 	},
 	"devDependencies": {
 		"autoprefixer": "^7.1.2",
@@ -137,6 +141,7 @@
 		"url-loader": "^0.5.9",
 		"webpack": "^3.5.5",
 		"webpack-dev-middleware": "^1.12.0",
+		"webpack-dev-server": "^2.7.1",
 		"webpack-hot-middleware": "^2.18.2",
 		"webpack-merge": "^4.1.0",
 		"webpack-node-externals": "^1.6.0"

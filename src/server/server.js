@@ -47,8 +47,6 @@ if (inDevelopment) {
 
 // Register server-side rendering middleware
 app.get('*', (req, res) => {
-  if (inDevelopment) webpackIsomorphicTools.refresh();
-
   const history = createHistory();
   const store = configureStore(history);
   const renderHtml = (store, htmlContent) => {
@@ -57,12 +55,6 @@ app.get('*', (req, res) => {
 
     return `<!doctype html>${html}`;
   };
-
-  // If __DISABLE_SSR__ = true, disable server side rendering
-  // if (__DISABLE_SSR__) {
-  //   res.send(renderHtml(store));
-  //   return;
-  // }
 
   // Load data on server-side
   const loadBranchData = () => {

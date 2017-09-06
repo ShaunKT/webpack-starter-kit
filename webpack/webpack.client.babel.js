@@ -19,11 +19,6 @@ const factor = require('./webpack.modules.config');
 // Environment Target
 import { nodeEnv, inDevelopment, inProduction } from '../src/config/index';
 
-const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
-const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(
-  require('./webpackIsomorphicConfig.config'),
-).development(inDevelopment);
-
 // Directory Paths
 const PATHS = {
   src: path.join(process.cwd(), './src'),
@@ -87,7 +82,6 @@ const commonConfig = merge([
       }),
       new webpack.NoEmitOnErrorsPlugin(),
       new webpack.HashedModuleIdsPlugin(),
-      webpackIsomorphicToolsPlugin,
     ],
     module: {
       rules: [

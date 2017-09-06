@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
@@ -15,6 +13,9 @@ const history = createHistory();
 const store = configureStore(history, initialState);
 const mountNode = document.getElementById('react-view');
 
+// // Favicon
+// require('./assets/favicons/favicon.ico');
+//
 // Styles
 import './styles/main.scss';
 
