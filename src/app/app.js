@@ -30,7 +30,7 @@ export default () => {
       <div>
         <img src={require('../assets/images/logo.jpg')} alt="Logo" role="presentation" />
         <h1>{config.app.title}</h1>
-        <p>This has HMR</p>
+        <p>This has Test hmr</p>
         <img src={require('../assets/images/image-placeholder.jpg')} alt="Placeholder" />
       </div>
       <hr />

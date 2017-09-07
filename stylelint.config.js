@@ -10,7 +10,6 @@ module.exports = {
         ],
       },
     ],
-    'selector-max-id': 3,
     indentation: 2,
     'selector-list-comma-newline-after': 'always',
     'declaration-colon-space-after': 'always',
@@ -23,7 +22,7 @@ module.exports = {
 
     // SASS
     'at-rule-blacklist': ['extend'],
-    'max-nesting-depth': 3,
+    'max-nesting-depth': 6,
     'declaration-no-important': true,
     'selector-max-compound-selectors': 3,
     'selector-no-qualifying-type': true,

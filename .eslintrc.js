@@ -48,6 +48,5 @@ module.exports = {
     __SERVER__: true,
     __DISABLE_SSR__: true,
     __DEV__: true,
-    webpackIsomorphicTools: true
   }
 };

@@ -36,21 +36,13 @@ const renderApp = () => {
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  const reRenderApp = () => {
-    try {
-      renderApp();
-    } catch (error) {
-      const RedBox = require('redbox-react').default;
-
-      render(<RedBox error={error} />, mountNode);
-    }
-  };
-
+  renderApp();
+  
   module.hot.accept('./app/app', () => {
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);
-      reRenderApp();
+      renderApp();
     });
   });
 }
