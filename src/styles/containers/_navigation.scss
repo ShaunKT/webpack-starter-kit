@@ -1,0 +1,30 @@
+// --------------------------------
+// Navigation
+// --------------------------------
+
+nav {
+  display: inline-block;
+  margin-left: auto;
+}
+
+.header-nav__container {
+  text-align: right;
+
+  .header-nav__tab {
+    display: inline-block;
+    padding: 0 .7em;
+
+    a {
+      color: $chalk;
+      cursor: pointer;
+
+      &:hover {
+        color: $sky-blue;
+      }
+    }
+
+    .active {
+      color: $red;
+    }
+  }
+}

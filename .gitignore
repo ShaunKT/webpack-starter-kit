@@ -1,7 +1,7 @@
 build
 .vscode
 node_modules
-.sass-cach
+.sass-cache
 .DS_store
 .eslintcache
 records.json

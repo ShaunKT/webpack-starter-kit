@@ -1,26 +1,26 @@
-import { fetchUsersIfNeeded } from '../actions/home';
-import { fetchUserIfNeeded } from '../actions/users';
-import HomePage from '../elements/containers/Home';
-import UserInfoPage from '../elements/containers/UserInfo';
-import NotFoundPage from '../elements/containers/NotFound';
+import HomePage from '../elements/pages/home';
+import CounterPage from '../elements/components/counter/counterContainer';
+import DashboardPage from '../elements/containers/dashboard/dashboardContainer';
+import NotFoundPage from '../elements/pages/notFound';
 
 export default [
   {
     path: '/',
     exact: true,
-    component: HomePage, // Add your route here
-    loadData: dispatch =>
-      Promise.all([
-        dispatch(fetchUsersIfNeeded()), // Register your server-side call action(s) here
-      ]),
+    component: HomePage
   },
   {
-    path: '/UserInfo/:id',
-    component: UserInfoPage,
-    loadData: (dispatch, params) => Promise.all([dispatch(fetchUserIfNeeded(params.id))]),
+    path: '/dashboard',
+    exact: true,
+    component: DashboardPage
+  },
+  {
+    path: '/counter',
+    exact: true,
+    component: CounterPage
   },
   {
     path: '*',
-    component: NotFoundPage,
-  },
+    component: NotFoundPage
+  }
 ];

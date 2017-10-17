@@ -1,45 +1,31 @@
+// --------------------------------
+// Styles entry points
+// --------------------------------
+
 :global {
-  @import './ui/color-palette';
+  // Browser Reset
+  @import './util/browser-reset';
 
-  body {
-    background: #450202;
-    background-image: url('../assets/images/image-placeholder.jpg');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    display: flex;
-    justify-content: center;
+  // Mixins
+  @import './mixins/helper';
+  @import './mixins/typography-layout';
 
-    div {
-      color: $colorGrey;
-    }
+  // Fonts
+  @import './fonts/fonts';
 
-    h1 {
-      color: $colorGrey;
-      font-weight: bold;
-    }
+  // Typography
+  @import './ui/typography';
 
-    a {
-      color: white;
-      text-decoration: none;
-    }
-  }
+  // Colour Palette
+  @import './ui/colour-palette';
 
-  .class-btn {
-    background: blue;
-    height: 100px;
-    width: 100%;
-  }
+  // Components
+  @import './components/logos';
 
-  .Testkajdfsfgsdafsndas {
-    background: blue;
-  }
+  // Containers
+  @import './containers/layout';
+  @import './containers/header';
+  @import './containers/navigation';
+  @import './containers/footer';
 
-  .Bestkaqweffqjsndas {
-    background: blue;
-  }
-
-  .Zestkabvzcjsndas {
-    background: blue;
-  }
 }

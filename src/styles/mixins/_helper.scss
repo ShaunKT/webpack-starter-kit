@@ -1,0 +1,11 @@
+@mixin clearfix() {
+  display: flow-root;
+  &:before,
+  &:after {
+    content: '';
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}

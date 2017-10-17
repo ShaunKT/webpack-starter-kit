@@ -1,0 +1,30 @@
+// --------------------------------
+// FOOTER
+// --------------------------------
+
+footer {
+  width: 100%;
+  padding: 2em 0.5em;
+  display: block;
+  background: $deep-blue;
+  @include clearfix();
+
+  flex: 0 1 100%;
+  align-self:flex-end;
+  margin-top: auto;
+}
+
+.footer--content {
+  display: block;
+  text-align: center;
+  color: $chalk;
+}
+
+.footer--content__link {
+  position: relative;
+  color: $chalk;
+
+  &:hover {
+    color: $sky-blue;
+  }
+}

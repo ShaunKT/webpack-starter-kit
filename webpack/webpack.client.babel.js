@@ -1,4 +1,4 @@
-'use strict'; // eslint-disable-line
+'use strict';
 
 // Libs
 const path = require('path');
@@ -8,18 +8,15 @@ const merge = require('webpack-merge');
 const HappyPack = require('happypack');
 
 // Webpack Plugins
-const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const AssetsByTypePlugin = require('webpack-assets-by-type-plugin');
 
 // Happy Pack Thread
 const happyThreadPool = HappyPack.ThreadPool({ size: 4 });
 
 // Configuration
 const factor = require('./webpack.modules.config');
-
-// Environment Target
-import { nodeEnv, inDevelopment } from '../src/config/index';
+const { host, port, nodeEnv, inDevelopment, inProduction } = require('../src/config');
 
 // Directory Paths
 const PATHS = {
@@ -27,7 +24,7 @@ const PATHS = {
   app: path.join(process.cwd(), './src/index.js'),
   styles: path.join(process.cwd(), './src/styles'),
   build: path.join(process.cwd(), './build/'),
-  nodeModules: /node_modules/,
+  nodeModules: /node_modules/
 };
 
 // Common Webpack Configuration
@@ -38,15 +35,9 @@ const commonConfig = merge([
     resolve: {
       modules: ['src', 'node_modules'],
       descriptionFiles: ['package.json'],
-      extensions: ['.js', '.jsx', '.json', '.scss', '.css'],
-    },
-    output: {
-      path: path.join(process.cwd(), './build/static'),
-      filename: 'js/[name].js',
-      chunkFilename: 'js/[name].js',
+      extensions: ['.js', '.jsx', '.json', '.scss', '.css']
     },
     plugins: [
-      new webpack.NoEmitOnErrorsPlugin(),
       new webpack.HashedModuleIdsPlugin(),
       new webpack.optimize.ModuleConcatenationPlugin(),
       new HappyPack({
@@ -57,11 +48,11 @@ const commonConfig = merge([
             loader: 'babel-loader',
             options: {
               cacheDirectory: inDevelopment,
-              babelrc: true,
-            },
-          },
-        ],
-      }),
+              babelrc: true
+            }
+          }
+        ]
+      })
     ],
     module: {
       rules: [
@@ -69,226 +60,114 @@ const commonConfig = merge([
           test: /\.jsx?$/,
           include: PATHS.src,
           exclude: PATHS.nodeModules,
-          use: 'happypack/loader?id=scripts',
-        },
-      ],
+          use: 'happypack/loader?id=scripts'
+        }
+      ]
     },
     node: {
       fs: 'empty',
       vm: 'empty',
       net: 'empty',
-      tls: 'empty',
-    },
-  },
+      tls: 'empty'
+    }
+  }
 ]);
 
 // Development Configuration
 const developmentConfig = merge([
   {
-    cache: true,
+    cache: false,
     devtool: 'cheap-module-eval-source-map',
-    entry: [
-      'babel-polyfill',
-      'react-hot-loader/patch',
-      'webpack-dev-server/client?http://localhost:3030',
-      PATHS.app,
-    ],
+    entry: ['babel-polyfill', 'react-hot-loader/patch', 'webpack-dev-server/client?http://localhost:3030', PATHS.src],
     output: {
-      publicPath: 'http://localhost:3030/',
+      filename: '[name].js',
+      path: path.join(process.cwd(), '/'),
+      publicPath: 'http://localhost:3030/'
     },
     plugins: [
-      new webpack.HotModuleReplacementPlugin(),
       new webpack.NamedModulesPlugin(),
-      new webpack.IgnorePlugin(/webpack-stats\.json$/),
-      new HtmlWebpackPlugin({
-        filename: 'index.html',
-        template: './src/views/index.ejs',
-      }),
-      new StyleLintPlugin({
-        configFile: './stylelint.config.js',
-        syntax: 'scss',
-        failOnError: false,
-      }),
+      new webpack.NoEmitOnErrorsPlugin(),
+      new webpack.HotModuleReplacementPlugin(),
       new HappyPack({
         id: 'styles',
         threadPool: happyThreadPool,
         loaders: [
-          'style-loader',
+          {
+            loader: 'style-loader',
+            options: {
+              sourceMap: true
+            }
+          },
           {
             loader: 'css-loader',
             options: {
               modules: true,
               importLoaders: 2,
-            },
+              sourceMap: true
+            }
           },
-          'postcss-loader',
-          'sass-loader',
-        ],
-      }),
-    ],
+          {
+            loader: 'postcss-loader',
+            query: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              sourceMapContents: true
+            }
+          }
+        ]
+      })
+    ]
   },
-  factor.lintJavaScript({
-    include: PATHS.app,
-    exclude: [PATHS.nodeModules, PATHS.styles],
-    options: {
-      emitWarning: false,
-      emitError: true,
-    },
-  }),
   factor.loadCSS(),
-  factor.fileLoader({
+  factor.fontLoader(),
+  factor.imageLoader({
     exclude: PATHS.nodeModules,
     include: PATHS.src,
+    options: {
+      name: '[name].[ext]'
+    }
   }),
   factor.devServer({
-    port: 3030,
-  }),
-]);
-
-// Staging Configuration
-const stagingConfig = merge([
-  {
-    cache: false,
-    devtool: 'source-map',
-    context: path.join(process.cwd()),
-    entry: {
-      main: PATHS.app,
-    },
-    output: {
-      publicPath: '/static/',
-    },
-    plugins: [
-      new webpack.LoaderOptionsPlugin({
-        options: {
-          minimize: true,
-        },
-      }),
-      new ExtractTextPlugin({
-        filename: 'styles/[name].css',
-        allChunks: true,
-        ignoreOrder: true,
-      }),
-      new webpack.EnvironmentPlugin({
-        NODE_ENV: JSON.stringify(nodeEnv),
-      }),
-    ],
-    module: {
-      rules: [
-        {
-          test: /\.(css|scss|sass)$/,
-          exclude: PATHS.nodeModules,
-          include: PATHS.styles,
-          loader: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: [
-              {
-                loader: 'css-loader',
-                options: {
-                  importLoaders: 2,
-                  sourceMap: true,
-                  modules: true,
-                  context: path.join(process.cwd(), './src'),
-                  localIdentName: '[hash:base64:5]',
-                  minimize: false,
-                },
-              },
-              {
-                loader: 'postcss-loader',
-                options: {
-                  sourceMap: true,
-                },
-              },
-              {
-                loader: 'sass-loader',
-                options: {
-                  outputStyle: 'expanded',
-                  sourceMap: true,
-                  sourceMapContents: true,
-                },
-              },
-            ],
-          }),
-        },
-      ],
-    },
-  },
-  factor.fileLoader({
-    exclude: PATHS.nodeModules,
-    include: PATHS.src,
-    options: {
-      name: '[name].[ext]',
-      context: path.join(process.cwd(), './src'),
-      publicPath: '/static/',
-      outputPath: 'images/',
-    },
-  }),
-  factor.uglifyJavaScript({
-    sourceMap: true,
-    uglifyOptions: {
-      ie8: false,
-      ecma: 8,
-      mangle: true,
-      output: {
-        comments: true,
-        beautify: true,
-      },
-      compress: true,
-      warnings: true,
-    },
-  }),
-  factor.purifyCSS({
-    paths: glob.sync(
-      `${PATHS.src}/**/**/**/*.js`, { nodir: true }
-    ),
-  }),
-  factor.minifyCSS({
-    options: {
-      discardComments: {
-        removeAll: false,
-      },
-      safe: true,
-    },
-  }),
-  factor.extractBundles([
-    {
-      name: 'vendor',
-      minChunks: ({ resource }) =>
-        resource && resource.indexOf('node_modules') >= 0 && resource.match(/\.js$/),
-    },
-    {
-      name: 'manifest',
-      minChunks: Infinity,
-    },
-  ]),
+    port: 3030
+  })
 ]);
 
 // Production Configuration
 const productionConfig = merge([
   {
-    cache: false,
+    cache: true,
     devtool: 'hidden-source-map',
     context: path.join(process.cwd()),
     recordsPath: path.join(process.cwd(), 'records.json'),
     entry: {
-      main: PATHS.app,
+      main: PATHS.src
     },
     output: {
       publicPath: '/static/',
+      filename: 'js/[name].js',
+      chunkFilename: 'js/[name].js',
+      path: path.join(process.cwd(), './build/static')
     },
     plugins: [
+      new AssetsByTypePlugin({ path: path.join(PATHS.build, 'assets.json') }),
       new webpack.LoaderOptionsPlugin({
         options: {
-          minimize: true,
-        },
+          minimize: true
+        }
       }),
       new ExtractTextPlugin({
         filename: 'styles/[name].css',
         allChunks: true,
-        ignoreOrder: true,
+        ignoreOrder: true
       }),
       new webpack.EnvironmentPlugin({
-        NODE_ENV: JSON.stringify(nodeEnv),
-      }),
+        NODE_ENV: JSON.stringify(nodeEnv)
+      })
     ],
     module: {
       rules: [
@@ -307,86 +186,100 @@ const productionConfig = merge([
                   modules: true,
                   context: path.join(process.cwd(), './src'),
                   localIdentName: '[hash:base64:5]',
-                  minimize: true,
-                },
+                  minimize: true
+                }
               },
               {
                 loader: 'postcss-loader',
                 options: {
-                  sourceMap: false,
-                },
+                  sourceMap: false
+                }
               },
               {
                 loader: 'sass-loader',
                 options: {
                   outputStyle: 'expanded',
                   sourceMap: false,
-                  sourceMapContents: false,
-                },
-              },
-            ],
-          }),
-        },
-      ],
-    },
+                  sourceMapContents: false
+                }
+              }
+            ]
+          })
+        }
+      ]
+    }
   },
-  factor.fileLoader({
+  factor.fontLoader({
     exclude: PATHS.nodeModules,
     include: PATHS.src,
     options: {
       name: '[name].[ext]',
       context: path.join(process.cwd(), './src'),
       publicPath: '/static/',
-      outputPath: 'images/',
-    },
+      outputPath: 'fonts/'
+    }
+  }),
+  factor.imageLoader({
+    exclude: PATHS.nodeModules,
+    include: PATHS.src,
+    options: {
+      name: '[name].[ext]',
+      context: path.join(process.cwd(), './src'),
+      publicPath: '/static/',
+      outputPath: 'images/'
+    }
   }),
   factor.uglifyJavaScript({
     sourceMap: false,
     uglifyOptions: {
-      ie8: false,
-      ecma: 8,
-      mangle: true,
-      output: {
-        comments: false,
-        beautify: false,
+      compress: {
+        ecma: 8,
+        keep_fnames: true,
+        warnings: false,
+        sequences: true,
+        dead_code: true,
+        conditionals: true,
+        booleans: true,
+        unused: true,
+        if_return: true,
+        join_vars: true,
+        drop_console: false
       },
-      compress: true,
-      warnings: false,
-    },
+      mangle: {
+        keep_fnames: true
+      },
+      output: {
+        comments: false
+      }
+    }
   }),
+  new webpack.optimize.DedupePlugin(),
   factor.purifyCSS({
-    paths: glob.sync(
-      `${PATHS.src}/**/**/**/*.js`, { nodir: true }
-    ),
+    paths: glob.sync(`${PATHS.src}/**/**/**/*.js`, { nodir: true })
   }),
   factor.minifyCSS({
     options: {
       discardComments: {
-        removeAll: true,
+        removeAll: true
       },
-      safe: true,
-    },
+      safe: true
+    }
   }),
   factor.extractBundles([
     {
       name: 'vendor',
-      minChunks: ({ resource }) =>
-        resource && resource.indexOf('node_modules') >= 0 && resource.match(/\.js$/),
+      minChunks: ({ resource }) => resource && resource.indexOf('node_modules') >= 0 && resource.match(/\.js$/)
     },
     {
       name: 'manifest',
-      minChunks: Infinity,
-    },
-  ]),
+      minChunks: Infinity
+    }
+  ])
 ]);
 
 // Webpack Config
 module.exports = env => {
   process.env.BABEL_ENV = env;
-
-  if (env === 'staging') {
-    return merge(commonConfig, stagingConfig);
-  }
 
   if (env === 'production') {
     return merge(commonConfig, productionConfig);

@@ -11,25 +11,10 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 // == Javascript == //
-// Javascript Linter
-exports.lintJavaScript = ({ include, exclude, options }) => ({
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        include,
-        exclude,
-        enforce: 'pre',
-        loader: 'eslint-loader',
-        options,
-      },
-    ],
-  },
-});
 
 // Bundle Splitting
 exports.extractBundles = bundles => ({
-  plugins: bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle)),
+  plugins: bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle))
 });
 
 // Minify JavaSscript Loader
@@ -38,12 +23,12 @@ exports.uglifyJavaScript = ({ uglifyOptions, sourceMap }) => ({
     new UglifyJSPlugin({
       parallel: {
         cache: true,
-        workers: 2,
+        workers: 2
       },
       sourceMap,
-      uglifyOptions,
-    }),
-  ],
+      uglifyOptions
+    })
+  ]
 });
 
 // == Styles == //
@@ -55,10 +40,10 @@ exports.loadCSS = ({ include, exclude } = {}) => ({
         test: /\.(css|scss|sass)$/,
         include,
         exclude,
-        use: 'happypack/loader?id=styles',
-      },
-    ],
-  },
+        use: 'happypack/loader?id=styles'
+      }
+    ]
+  }
 });
 
 // Remove unused css classes
@@ -66,9 +51,9 @@ exports.purifyCSS = ({ paths }) => ({
   plugins: [
     new PurifyCSSPlugin({
       paths,
-      minimize: true,
-    }),
-  ],
+      minimize: true
+    })
+  ]
 });
 
 // Minify Styles
@@ -77,35 +62,29 @@ exports.minifyCSS = ({ options }) => ({
     new OptimizeCSSAssetsPlugin({
       cssProcessor: cssnano,
       cssProcessorOptions: options,
-      canPrint: true,
-    }),
-  ],
+      canPrint: true
+    })
+  ]
 });
 
 // == Assets == //
-// Url Loaders
-exports.urlLoader = ({ include, exclude, options } = {}) => ({
+// Font Loaders
+exports.fontLoader = ({ include, exclude, options } = {}) => ({
   module: {
     rules: [
       {
-        test: /\.(jpe?g|png|gif|ico)$/,
+        test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
         include,
         exclude,
-
-        use: [
-          {
-            loader: 'url-loader',
-            options,
-          },
-          'image-webpack-loader',
-        ],
-      },
-    ],
-  },
+        loader: 'file-loader',
+        options
+      }
+    ]
+  }
 });
 
-// File Loaders
-exports.fileLoader = ({ include, exclude, options } = {}) => ({
+// Image Loaders
+exports.imageLoader = ({ include, exclude, options } = {}) => ({
   module: {
     rules: [
       {
@@ -115,16 +94,16 @@ exports.fileLoader = ({ include, exclude, options } = {}) => ({
         use: [
           {
             loader: 'file-loader',
-            options,
+            options
           },
           {
             loader: 'image-webpack-loader',
-            options: { bypassOnDebug: true },
-          },
-        ],
-      },
-    ],
-  },
+            options: { bypassOnDebug: true }
+          }
+        ]
+      }
+    ]
+  }
 });
 
 // == Environment Variables == //
@@ -134,7 +113,7 @@ exports.setFreeVariable = (key, value) => {
   env[key] = JSON.stringify(value);
 
   return {
-    plugins: [new webpack.DefinePlugin(env)],
+    plugins: [new webpack.DefinePlugin(env)]
   };
 };
 
@@ -144,18 +123,17 @@ exports.devServer = ({ host, port } = {}) => ({
   devServer: {
     historyApiFallback: true,
     stats: 'errors-only',
-    hotOnly: true,
     hot: true,
-    contentBase: path.resolve(__dirname, '../build'),
+    contentBase: path.resolve(__dirname, '../src'),
     inline: true,
     host,
     port,
     overlay: {
       warnings: false,
-      errors: true,
+      errors: true
     },
     headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
-  },
+      'Access-Control-Allow-Origin': '*'
+    }
+  }
 });
