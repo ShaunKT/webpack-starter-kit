@@ -1,40 +1,47 @@
-// Libs
+// React
 import React from 'react';
+
+// React Router
 import { Route, Switch } from 'react-router-dom';
+
+// Libs
 import Helmet from 'react-helmet';
 import _ from 'lodash';
-
-// Configuration
-import config from '../config';
 
 // Routes
 import routes from '../routes/routes';
 
+// Elements
+import Header from '../elements/containers/header/header';
+import Footer from '../elements/containers/footer/footer';
+
 export default () => {
-  // Use it when sub routes are added to any route it'll work
   const routeWithSubRoutes = route => (
     <Route
       key={_.uniqueId()}
       exact={route.exact || false}
       path={route.path}
       render={props => (
-        // Pass the sub-routes down to keep nesting
         <route.component {...props} routes={route.routes || null} />
       )}
     />
   );
 
-  return (
-    <div>
-      <Helmet {...config.app} />
-      <div>
-        <img src={require('../assets/images/logo.jpg')} alt="Logo" role="presentation" />
-        <h1>{config.app.title}</h1>
-        <p>This has Test hmr</p>
-        <img src={require('../assets/images/image-placeholder.jpg')} alt="Placeholder" />
-      </div>
-      <hr />
+  return [
+    <Helmet titleTemplate="Webpack Starter Kit - %s">
+      <meta charSet="utf-8" />
+      <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      />
+      <link rel="icon" href={require('../assets/favicons/icon.png')} />
+      <title>Lunar</title>
+    </Helmet>,
+    <Header />,
+    <main>
       <Switch>{routes.map(route => routeWithSubRoutes(route))}</Switch>
-    </div>
-  );
+    </main>,
+    <Footer />
+  ];
 };

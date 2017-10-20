@@ -1,0 +1,19 @@
+// --------------------------------
+// Header
+// --------------------------------
+
+header {
+  width: 100%;
+  display: block;
+  @include clearfix();
+}
+
+.header__container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2em;
+  background: $deep-blue;
+}

@@ -1,0 +1,107 @@
+// --------------------------------
+// Typography
+// --------------------------------
+
+*,
+*::before,
+*::after {
+  font-family: 'Open Sans', sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+html,
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+ol,
+dd,
+small,
+label,
+address,
+blockquote,
+.light-p,
+.italic {
+  font-family: 'Open Sans';
+  font-style: normal;
+}
+
+h1,
+h2 {
+  font-weight: 800;
+}
+
+h3 {
+  font-weight: 700;
+}
+
+h4,
+h5 {
+  font-weight: 600;
+}
+
+h6,
+p,
+li,
+small {
+  font-weight: 400;
+  font-weight: normal;
+}
+
+a {
+  text-decoration: none;
+}
+
+// Light
+.light-p {
+  font-weight: 300;
+}
+
+// Italics
+.italic {
+  font-style: italic;
+}
+
+// Vertical rhythm
+h1 {
+  @include font-vertical-rhythm(3.2);
+}
+h2 {
+  @include font-vertical-rhythm(2.4);
+}
+
+h3 {
+  @include font-vertical-rhythm(2.2);
+}
+h4,
+h5 {
+  @include font-vertical-rhythm(2);
+}
+
+h6,
+p {
+  @include font-vertical-rhythm(1.6);
+}
+
+small {
+  @include font-vertical-rhythm(1.1);
+}
+
+li,
+ol,
+dd {
+  @include font-size(1.6);
+}

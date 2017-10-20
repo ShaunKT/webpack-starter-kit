@@ -1,0 +1,18 @@
+// --------------------------------
+// Vertical rhythm mixin
+// --------------------------------
+
+// Basic rem font with pixel fallback
+@mixin font-size($sizeValue: 1.6) {
+  font-size: ($sizeValue * 10)+px;
+  font-size: $sizeValue + rem;
+}
+
+// Vertical rhythm rem font with pixel fallback
+@mixin font-vertical-rhythm($sizeValue: 1.6, $line-height: 2.4) {
+  font-size: ($sizeValue * 10)+px;
+  font-size: $sizeValue + rem;
+  line-height: round(($line-height * 10) / ($sizeValue * 10)*10000) / 10000;
+  margin-bottom: ($line-height * 10)+px;
+  margin-bottom: ($line-height / $sizeValue)+rem;
+}

@@ -1,78 +1,65 @@
-## webpack-starter-kit
+## React Webpack Starter Kit
 
-This is a basic webpack 3 starter kit for react, react router and sass.
+This is a basic Webpack 3 starter kit for React 16, React-Router V4, Node(Express) and Sass
+
+**Note:**
+This setup was created using Node 8.1.3 and npm 5.5.1 || yarn 1.2.1.
 
 
 ## Getting started
 
-To get started you need to run `yarn install`.
-
-**Note:**  This setup was created using Node v8.1.3
+To get started you need to run ```yarn install```.
 
 
 ## Setting up Linters
 
-Setting up the linter packages helps keep the css/sass styles and javascript consistent in the project.
+Setting up the linter packages helps keep the code consistent in the project.
 
+#### 1) Prettier - Prettier is an opinionated code formatter
 
-#### 1) Style Linters
+  - Prettier - [https://github.com/prettier/prettier]
 
-  - Stylinter = [https://stylelint.io/]
+  - setup vscode = [https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode]
 
-  - Airbnb Styles - [https://github.com/airbnb/css]
-
-  - BEM = [http://getbem.com/introduction/]
-
-  - setup vscode = [https://github.com/shinnn/vscode-stylelint]
-
-  - setup atom = [https://atom.io/packages/linter-stylelint]
-
-
-
-#### 2) Javascript/JSX Linters
-
-  - Airbnb Linter = [https://github.com/airbnb/javascript]
-
-  - Eslint react plugin  = [https://www.npmjs.com/package/eslint-plugin-react]
-
-  - setup vscode = install extension eslint
-
-  - setup atom = `apm install linter-eslint`
-
+  - setup atom = [https://atom.io/packages/prettier-atom]
 
 
 ## Webpack
 
-Once you have completed the setup run one of the 4 webpack.configs ENV's (Development, Staging, Production, Server).
+Once you have completed the setup, run one of the Webpack configurations.
 
-
-1) **Development** (Hot Module Replacement and Linters)
+1) **Development** (Webpack with Hot Module Replacement)
 
   Terminal One
-  run `yarn start` = runs nodemon --ignore build --exec babel-node
+  Run `yarn start` - this starts nodemon --ignore build --exec babel-node on localhost:4000
 
   Terminal Two
-  run `yarn start:wds` = runs the Webpack Dev Server localhost:3030
+  Run `yarn start:wds` - this starts the Webpack Dev Server
+
+  Browser
+  Open your browser on http://localhost:4000/
 
 
 2) **Staging**
 
-  run `build:staging` = removes the old build folder and then runs a new staging and server build
+"start": "better-npm-run build:development NODE_ENV=development",
+"start:wds":
+  "webpack-dev-server --config ./webpack/webpack.client.babel.js",
+"build:production":
+  "yarn clean && better-npm-run client:production && better-npm-run server",
+"build:server": "better-npm-run clean:server && better-npm-run server",
+"run:node": "better-npm-run start:node",
+"clean": "better-npm-run clean"
 
 
-3) **Production**
+2) **Production**
 
-  run `build:production` = removes the old build folder and then runs a new production and server build
-
-
-4) **Server Side Rendering**
-
-  run `yarn build:server` removes the old server file and then runs a new server build
+  Run `build:production` - This will remove your old build folder and compile a new build
 
 
-5) **Run staging/production build with Node**
+3) **Run the production build with Node**
 
-run `yarn run:node` runs the staging or production build on your local with node
+run `yarn run:node` runs the production build on your local with node
 
 
 6) **Clean**
@@ -83,7 +70,10 @@ run `yarn run:node` runs the staging or production build on your local with node
 
 ## Folder Structure
 
-    |-- index.js
+    react-app
+    |
+    |-- customization
+    |
     |-- src
     |   |-- index.js
     |   |
@@ -94,8 +84,9 @@ run `yarn run:node` runs the staging or production build on your local with node
     |   |  |-- server.js
     |   |
     |   |-- elements
-    |   |  |-- components
+    |   |  |-- pages
     |   |  |-- container
+    |   |  |-- components
     |   |
     |   |-- routes
     |   |  |-- routes.js
@@ -109,32 +100,30 @@ run `yarn run:node` runs the staging or production build on your local with node
     |   |-- stores
     |   |  |-- store.js
     |   |
-    |   |-- images
-    |   |  |-- img.png
-    |   |  |-- img.jpg
-    |   |  |-- img.gif
+    |   |-- assets
+    |   |  |-- images
+    |   |  |-- favicon
     |   |
     |   |-- styles
-    |   |  |-- main.scss
+    |   |  |-- ui
+    |   |  |-- util
+    |   |  |-- fonts
+    |   |  |-- pages
     |   |  |-- containers
     |   |  |-- components
     |   |  |-- animations
-    |   |  |-- ui
+    |   |  |-- main.scss
     |   |
     |   |-- views
     |   |  |-- react-html.js
     |   
-    |-- package.json
     |-- webpack
-    |   |-- config.js
     |   |-- webpack.client.babel.js
     |   |-- webpack.server.babel.js
     |   |-- webpack.modules.config.js
-    |   |-- webpackIsomorphicConfig.config.js
-    |   
+    |
+    |-- package.json
     |-- .babelrc
     |-- .gitignore
-    |-- .eslintrc.js
-    |-- stylelint.config.js
-    |-- postcss.config.js
     |-- nodemon.json
+    |-- readme.md
