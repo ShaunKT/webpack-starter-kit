@@ -1,14 +1,26 @@
-// Pages
-import { HomePage, NotFoundPage } from '../elements/pages/index';
+// React
+import React from 'react';
+
+import App from '../app/app';
+import { HomePage, NotFoundPage, UsersPage } from '../elements/pages/index';
 
 export default [
   {
-    path: '/',
-    exact: true,
-    ...HomePage
-  },
-  {
-    path: '*',
-    ...NotFoundPage
+    ...App,
+    routes: [
+      {
+        path: '/',
+        exact: true,
+        ...HomePage
+      },
+      {
+        path: '/users',
+        ...UsersPage
+      },
+      {
+        path: '*',
+        ...NotFoundPage
+      }
+    ]
   }
 ];

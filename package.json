@@ -11,13 +11,7 @@
     "type": "git",
     "url": "https://github.com/ShaunKT/webpack-starter-kit"
   },
-  "keywords": [
-    "hmr",
-    "webpack",
-    "SASS",
-    "react",
-    "React Router"
-  ],
+  "keywords": ["hmr", "webpack", "SASS", "react", "React Router"],
   "author": "Shaun Townsend (https://github.com/ShaunKT)",
   "license": "MIT",
   "bugs": {
@@ -26,15 +20,18 @@
   "homepage": "https://github.com/ShaunKT/webpack-starter-kit",
   "scripts": {
     "start": "better-npm-run build:development NODE_ENV=development",
-    "start:wds": "webpack-dev-server --config ./webpack/webpack.client.babel.js",
-    "build:production": "yarn clean && better-npm-run client:production && better-npm-run server",
+    "start:wds":
+      "webpack-dev-server --config ./webpack/webpack.client.babel.js",
+    "build:production":
+      "yarn clean && better-npm-run client:production && better-npm-run server",
     "build:server": "better-npm-run clean:server && better-npm-run server",
     "run:node": "better-npm-run start:node",
     "clean": "better-npm-run clean"
   },
   "betterScripts": {
     "build:development": {
-      "command": "nodemon --ignore build --exec babel-node ./src/server/server.js",
+      "command":
+        "nodemon --ignore build --exec babel-node ./src/server/server.js",
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
@@ -50,13 +47,15 @@
       }
     },
     "client:production": {
-      "command": "webpack --env production --progress --hide-modules --config ./webpack/webpack.client.babel.js",
+      "command":
+        "webpack --env production --progress --hide-modules --config ./webpack/webpack.client.babel.js",
       "env": {
         "NODE_ENV": "production"
       }
     },
     "server": {
-      "command": "webpack --progress --hide-modules --config ./webpack/webpack.server.babel.js",
+      "command":
+        "webpack --progress --hide-modules --config ./webpack/webpack.server.babel.js",
       "env": {
         "NODE_ENV": "production"
       }

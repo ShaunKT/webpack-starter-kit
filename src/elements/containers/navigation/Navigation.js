@@ -10,14 +10,16 @@ const Navigation = () => (
       {[
         {
           route: '/',
-          label: 'Landing Page'
+          label: 'Landing Page',
+          key: 'tab_1_navigation'
         },
         {
           route: '/404',
-          label: '404 Page'
+          label: '404 Page',
+          key: 'tab_5_navigation'
         }
       ].map(link => (
-        <li key={link.route} className="header-nav__tab">
+        <li key={link.key} className="header-nav__tab">
           <NavLink exact to={link.route} activeClassName="active">
             {link.label}
           </NavLink>
