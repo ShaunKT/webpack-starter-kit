@@ -14,19 +14,37 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 // Bundle Splitting
 exports.extractBundles = bundles => ({
-  plugins: bundles.map(bundle => new webpack.optimize.CommonsChunkPlugin(bundle))
+  plugins: bundles.map(
+    bundle => new webpack.optimize.CommonsChunkPlugin(bundle)
+  )
 });
 
 // Minify JavaSscript Loader
-exports.uglifyJavaScript = ({ uglifyOptions, sourceMap }) => ({
+exports.uglifyJavaScript = () => ({
   plugins: [
     new UglifyJSPlugin({
-      parallel: {
-        cache: true,
-        workers: 2
-      },
-      sourceMap,
-      uglifyOptions
+      sourceMap: false,
+      parallel: 4,
+      uglifyOptions: {
+        ecma: 8,
+        ie8: false,
+        warnings: false,
+        sequences: true,
+        dead_code: true,
+        unused: true,
+        mangle: true,
+        parse: {
+          html5_comments: false
+        },
+        compress: {
+          drop_console: true,
+          drop_debugger: true
+        },
+        output: {
+          comments: false,
+          beautify: false
+        }
+      }
     })
   ]
 });

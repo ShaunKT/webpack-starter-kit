@@ -1,5 +1,3 @@
-'use strict';
-
 // Libs
 const path = require('path');
 const glob = require('glob');
@@ -16,7 +14,14 @@ const happyThreadPool = HappyPack.ThreadPool({ size: 4 });
 
 // Configuration
 const factor = require('./webpack.modules.config');
-const { host, port, nodeEnv, inDevelopment, inProduction } = require('../src/config');
+
+const {
+  host,
+  port,
+  nodeEnv,
+  inDevelopment,
+  inProduction
+} = require('../src/config');
 
 // Directory Paths
 const PATHS = {
@@ -27,7 +32,7 @@ const PATHS = {
   nodeModules: /node_modules/
 };
 
-// Common Webpack Configuration
+// Common Configuration
 const commonConfig = merge([
   {
     name: 'client',
@@ -78,7 +83,12 @@ const developmentConfig = merge([
   {
     cache: false,
     devtool: 'cheap-module-eval-source-map',
-    entry: ['babel-polyfill', 'react-hot-loader/patch', 'webpack-dev-server/client?http://localhost:3030', PATHS.src],
+    entry: [
+      'babel-polyfill',
+      'react-hot-loader/patch',
+      'webpack-dev-server/client?http://localhost:3030',
+      PATHS.src
+    ],
     output: {
       filename: '[name].js',
       path: path.join(process.cwd(), '/'),
@@ -149,8 +159,8 @@ const productionConfig = merge([
     },
     output: {
       publicPath: '/static/',
-      filename: 'js/[name].js',
-      chunkFilename: 'js/[name].js',
+      filename: 'js/[name]_[hash].js',
+      chunkFilename: 'js/[name]_[hash].js',
       path: path.join(process.cwd(), './build/static')
     },
     plugins: [
@@ -161,7 +171,7 @@ const productionConfig = merge([
         }
       }),
       new ExtractTextPlugin({
-        filename: 'styles/[name].css',
+        filename: 'styles/[name]_[hash].css',
         allChunks: true,
         ignoreOrder: true
       }),
@@ -229,33 +239,10 @@ const productionConfig = merge([
       outputPath: 'images/'
     }
   }),
-  factor.uglifyJavaScript({
-    sourceMap: false,
-    uglifyOptions: {
-      compress: {
-        ecma: 8,
-        keep_fnames: true,
-        warnings: false,
-        sequences: true,
-        dead_code: true,
-        conditionals: true,
-        booleans: true,
-        unused: true,
-        if_return: true,
-        join_vars: true,
-        drop_console: false
-      },
-      mangle: {
-        keep_fnames: true
-      },
-      output: {
-        comments: false
-      }
-    }
-  }),
+  factor.uglifyJavaScript(),
   new webpack.optimize.DedupePlugin(),
   factor.purifyCSS({
-    paths: glob.sync(`${PATHS.src}/**/**/**/*.js`, { nodir: true })
+    paths: glob.sync(`${PATHS.src}/**/**/**/**/**/*.js`, { nodir: true })
   }),
   factor.minifyCSS({
     options: {
@@ -268,7 +255,10 @@ const productionConfig = merge([
   factor.extractBundles([
     {
       name: 'vendor',
-      minChunks: ({ resource }) => resource && resource.indexOf('node_modules') >= 0 && resource.match(/\.js$/)
+      minChunks: ({ resource }) =>
+        resource &&
+        resource.indexOf('node_modules') >= 0 &&
+        resource.match(/\.js$/)
     },
     {
       name: 'manifest',

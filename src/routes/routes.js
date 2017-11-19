@@ -1,26 +1,14 @@
-import HomePage from '../elements/pages/home';
-import CounterPage from '../elements/components/counter/counterContainer';
-import DashboardPage from '../elements/containers/dashboard/dashboardContainer';
-import NotFoundPage from '../elements/pages/notFound';
+// Pages
+import { HomePage, NotFoundPage } from '../elements/pages/index';
 
 export default [
   {
     path: '/',
     exact: true,
-    component: HomePage
-  },
-  {
-    path: '/dashboard',
-    exact: true,
-    component: DashboardPage
-  },
-  {
-    path: '/counter',
-    exact: true,
-    component: CounterPage
+    ...HomePage
   },
   {
     path: '*',
-    component: NotFoundPage
+    ...NotFoundPage
   }
 ];
