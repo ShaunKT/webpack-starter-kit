@@ -1,6 +1,6 @@
 // React
 import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
+import { hydrate, unmountComponentAtNode } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
 // Redux
@@ -9,7 +9,7 @@ import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter } from 'react-router-redux';
 
 // Store
-import configureStore from './store/store';
+import configureStore from './store/createStore';
 
 // Get initial state from server-side rendering
 const initialState = window.__INITIAL_STATE__;
@@ -25,7 +25,7 @@ import styles from './styles/main.scss';
 const renderApp = () => {
   const App = require('./app/app').default;
 
-  render(
+  hydrate(
     <AppContainer>
       <Provider store={store}>
         <ConnectedRouter history={history}>

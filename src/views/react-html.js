@@ -1,43 +1,48 @@
+// React
 import React from 'react';
-import Helmet from 'react-helmet';
+import { renderToString } from 'react-dom/server';
+
+// Serialize
 import serialize from 'serialize-javascript';
 
-// Environment Target
-import { inProduction } from '../config';
+// Helmet
+import { Helmet } from 'react-helmet';
 
-const ReactHTML = ({ store, assets, htmlContent }) => {
-  const head = Helmet.renderStatic();
-  const attrs = head.htmlAttributes.toComponent();
-  const { lang, ...rest } = attrs || {};
+// Redux
+import { Provider } from 'react-redux';
 
-  return (
-    <html {...rest} lang={lang || 'en'}>
-      <head>
-        {head.title.toComponent()}
-        {head.base.toComponent()}
-        {head.meta.toComponent()}
-        {head.link.toComponent()}
+// React Router
+import { StaticRouter } from 'react-router-dom';
+import { renderRoutes } from 'react-router-config';
 
-        {inProduction && assets.css.map(path => <link rel="stylesheet" type="text/css" key={path} href={path} />)}
-      </head>
-      <body>
-        <div id="react-view" dangerouslySetInnerHTML={{ __html: htmlContent || '' }} />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: store && `window.__INITIAL_STATE__=${serialize(store.getState())};`
-          }}
-        />
-        {inProduction ? (
-          assets.js.map(path => <script key={path} src={path} />)
-        ) : (
-          <script type="text/javascript" src="http://localhost:3030/main.js" />
-        )}
-        {head.script.toComponent()}
-      </body>
-    </html>
+// Routes
+import Routes from '../routes/routes';
+
+// Render app to string
+export default (req, store, context) => {
+  const content = renderToString(
+    <Provider store={store}>
+      <StaticRouter location={req.path} context={context}>
+        <div>{renderRoutes(Routes)}</div>
+      </StaticRouter>
+    </Provider>
   );
+
+  const helmet = Helmet.renderStatic();
+
+  return `
+  <html>
+    <head>
+      ${helmet.title.toString()}
+      ${helmet.meta.toString()}
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    </head>
+    <body>
+      <div id="react-root">${content}</div>
+      <script>
+        window.INITIAL_STATE = ${serialize(store.getState())}
+      </script>
+      <script src="bundle.js"></script>
+    </body>
+  </html>`;
 };
-
-ReactHTML.defaultProps = { htmlContent: '' };
-
-export default ReactHTML;

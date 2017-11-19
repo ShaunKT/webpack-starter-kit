@@ -1,26 +1,26 @@
-import HomePage from '../elements/pages/home';
-import CounterPage from '../elements/components/counter/counterContainer';
-import DashboardPage from '../elements/containers/dashboard/dashboardContainer';
-import NotFoundPage from '../elements/pages/notFound';
+// React
+import React from 'react';
+
+import App from '../app/app';
+import { HomePage, NotFoundPage, UsersPage } from '../elements/pages/index';
 
 export default [
   {
-    path: '/',
-    exact: true,
-    component: HomePage
-  },
-  {
-    path: '/dashboard',
-    exact: true,
-    component: DashboardPage
-  },
-  {
-    path: '/counter',
-    exact: true,
-    component: CounterPage
-  },
-  {
-    path: '*',
-    component: NotFoundPage
+    ...App,
+    routes: [
+      {
+        path: '/',
+        exact: true,
+        ...HomePage
+      },
+      {
+        path: '/users',
+        ...UsersPage
+      },
+      {
+        path: '*',
+        ...NotFoundPage
+      }
+    ]
   }
 ];
