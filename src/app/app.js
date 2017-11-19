@@ -28,7 +28,7 @@ export default () => {
   );
 
   return [
-    <Helmet titleTemplate="Webpack Starter Kit - %s">
+    <Helmet key="helmet_app" titleTemplate="Webpack Starter Kit - %s">
       <meta charSet="utf-8" />
       <meta httpEquiv="x-ua-compatible" content="ie=edge" />
       <meta
@@ -36,12 +36,12 @@ export default () => {
         content="width=device-width, initial-scale=1, shrink-to-fit=no"
       />
       <link rel="icon" href={require('../assets/favicons/icon.png')} />
-      <title>Lunar</title>
+      <title>Webpack</title>
     </Helmet>,
-    <Header />,
-    <main>
+    <Header key="header_app" />,
+    <main key="main_app">
       <Switch>{routes.map(route => routeWithSubRoutes(route))}</Switch>
     </main>,
-    <Footer />
+    <Footer key="footer_app" />
   ];
 };

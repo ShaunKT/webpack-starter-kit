@@ -13,18 +13,6 @@ const Navigation = () => (
           label: 'Landing Page'
         },
         {
-          route: '/counter',
-          label: 'counter'
-        },
-        {
-          route: '/dashboard',
-          label: 'Dashboard Page'
-        },
-        {
-          route: '/conatct',
-          label: 'Contact Page'
-        },
-        {
           route: '/404',
           label: '404 Page'
         }
