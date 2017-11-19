@@ -4,6 +4,10 @@ import React from 'react';
 // Helmet
 import Helmet from 'react-helmet';
 
+// Redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 const HomePage = () => {
   return [
     <Helmet key="helmet_homePage" title="Webpack Starter Kit - Landing Page" />,

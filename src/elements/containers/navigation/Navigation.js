@@ -14,6 +14,11 @@ const Navigation = () => (
           key: 'tab_1_navigation'
         },
         {
+          route: '/users',
+          label: 'users',
+          key: 'tab_2_users'
+        },
+        {
           route: '/404',
           label: '404 Page',
           key: 'tab_5_navigation'
