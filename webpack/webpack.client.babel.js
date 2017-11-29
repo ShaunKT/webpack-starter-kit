@@ -86,13 +86,13 @@ const developmentConfig = merge([
     entry: [
       'babel-polyfill',
       'react-hot-loader/patch',
-      'webpack-dev-server/client?http://localhost:3000',
+      'webpack-dev-server/client?http://localhost:3030',
       PATHS.src
     ],
     output: {
       filename: '[name].js',
       path: path.join(process.cwd(), '/'),
-      publicPath: 'http://localhost:3000/'
+      publicPath: 'http://localhost:3030/'
     },
     plugins: [
       new webpack.NamedModulesPlugin(),
@@ -143,7 +143,7 @@ const developmentConfig = merge([
     }
   }),
   factor.devServer({
-    port: 3000
+    port: 3030
   })
 ]);
 

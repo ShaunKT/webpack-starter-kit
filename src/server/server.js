@@ -17,6 +17,14 @@ import Routes from '../routes/routes';
 // Store
 import createStore from '../store/createStore';
 
+// Configs
+import {
+  inProduction,
+  inDevelopment,
+  port,
+  host
+} from '../../src/config/index';
+
 // Create App
 const app = express();
 
@@ -33,6 +41,8 @@ app.use(express.static('public'));
 
 app.get('*', (req, res) => {
   const store = createStore(req);
+  const assets = global.assets;
+  console.log('assets', assets);
 
   const promises = matchRoutes(Routes, req.path)
     .map(({ route }) => {
@@ -62,6 +72,13 @@ app.get('*', (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log('Listening on port http://localhost:3000');
-});
+// Express port and host
+if (port) {
+  app.listen(port, host, err => {
+    const url = `http://${host}:${port}`;
+    if (err) console.error(err);
+    console.info(
+      `Listening on ${url} ${inDevelopment ? '(development)' : '(production)'}`
+    );
+  });
+}

@@ -1,10 +1,14 @@
+// React
 import React from 'react';
 
+// React Router
 import { renderRoutes } from 'react-router-config';
 
+// Elements
 import Header from '../elements/containers/header/Header';
 
-import { fetchCurrentUser } from '../actions/usersAction';
+// Actions
+import { fetchCurrentUser } from '../actions/index';
 
 const App = ({ route }) => {
   return [

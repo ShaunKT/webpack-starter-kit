@@ -1,50 +1,61 @@
+// Babel
+import 'babel-polyfill';
+
 // React
 import React from 'react';
-import { hydrate, unmountComponentAtNode } from 'react-dom';
+import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
-// Redux
+// React Router
+import { BrowserRouter } from 'react-router-dom';
+import { renderRoutes } from 'react-router-config';
+
+// Axios
+import axios from 'axios';
+
+// Redux | Thunk
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import createHistory from 'history/createBrowserHistory';
-import { ConnectedRouter } from 'react-router-redux';
 
-// Store
-import configureStore from './store/createStore';
+// Routes
+import Routes from './routes/routes';
 
-// Get initial state from server-side rendering
-const initialState = window.__INITIAL_STATE__;
-const history = createHistory();
-const store = configureStore(history, initialState);
+// Reducers
+import reducers from './reducers/index';
 
-// Id to mount react in html
-const mountNode = document.getElementById('react-view');
+import Styles from './styles/main.scss';
 
-// Styles
-import styles from './styles/main.scss';
+// Create a custome axios instance
+const axiosInstance = axios.create({
+  baseURL: '/api'
+});
 
-const renderApp = () => {
-  const App = require('./app/app').default;
+// Create Store
+const store = createStore(
+  reducers,
+  window.INITIAL_STATE,
+  applyMiddleware(thunk.withExtraArgument(axiosInstance))
+);
 
-  hydrate(
-    <AppContainer>
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <App />
-        </ConnectedRouter>
-      </Provider>
-    </AppContainer>,
-    mountNode
+// Hydrate App
+
+const renderApp = Route => {
+  ReactDOM.hydrate(
+    <Provider store={store}>
+      <BrowserRouter>
+        <div>{renderRoutes(Route)}</div>
+      </BrowserRouter>
+    </Provider>,
+    document.querySelector('#react-root')
   );
 };
 
+renderApp(Routes);
+
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./app/app', () => {
-    setImmediate(() => {
-      unmountComponentAtNode(mountNode);
-      renderApp();
-    });
+  module.hot.accept('./routes/routes', () => {
+    renderApp(Routes);
   });
 }
-
-renderApp();

@@ -1,8 +1,16 @@
 // React
 import React from 'react';
 
+// Rendered Components
 import App from '../app/app';
-import { HomePage, NotFoundPage, UsersPage } from '../elements/pages/index';
+
+// Pages
+import {
+  HomePage,
+  UsersPage,
+  AdminsPage,
+  NotFoundPage
+} from '../elements/pages/index';
 
 export default [
   {
@@ -16,6 +24,10 @@ export default [
       {
         path: '/users',
         ...UsersPage
+      },
+      {
+        path: '/admins',
+        ...AdminsPage
       },
       {
         path: '*',

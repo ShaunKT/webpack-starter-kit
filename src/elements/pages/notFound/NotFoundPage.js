@@ -1,23 +1,27 @@
-// React
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-// Helmet
-import Helmet from 'react-helmet';
+const NotFoundPage = ({ staticContext = {} }) => {
+  staticContext.notFound = true;
+  return (
+    <article
+      style={{
+        width: '80%',
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        textAlign: 'center'
+      }}
+    >
+      <h4>Sorry your page was not found</h4>
 
-// Elements
-import { ErrorMsg } from '../../components/index';
-
-const NotFoundPage = () => {
-  return [
-    <Helmet
-      key="helmet_notFoundPage"
-      title="Page not found - 404 Error Page"
-    />,
-    <h1 key="h1_notFoundPage">Page not found - 404 Error</h1>,
-    <article key="article_notFoundPage">
-      <ErrorMsg />
+      <p>
+        Would you like to return to: &nbsp;
+        <Link to="/">Return Home</Link>
+      </p>
     </article>
-  ];
+  );
 };
 
 export default {

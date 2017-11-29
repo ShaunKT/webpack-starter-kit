@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
 
 import { connect } from 'react-redux';
-
-import { fetchUsers } from '../../../actions/usersAction';
+import { fetchUsers } from '../../../actions/index';
 
 class UsersPage extends Component {
   componentDidMount() {

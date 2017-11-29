@@ -18,6 +18,14 @@ import { renderRoutes } from 'react-router-config';
 // Routes
 import Routes from '../routes/routes';
 
+// Configs
+import {
+  inProduction,
+  inDevelopment,
+  port,
+  host
+} from '../../src/config/index';
+
 // Render app to string
 export default (req, store, context) => {
   const content = renderToString(
@@ -42,7 +50,6 @@ export default (req, store, context) => {
       <script>
         window.INITIAL_STATE = ${serialize(store.getState())}
       </script>
-      <script src="bundle.js"></script>
     </body>
   </html>`;
 };
