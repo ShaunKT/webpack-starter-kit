@@ -12,7 +12,7 @@ import { ConnectedRouter } from 'react-router-redux';
 import configureStore from './store/store';
 
 // Get initial state from server-side rendering
-const initialState = window.__INITIAL_STATE__;
+const initialState = window.__INITIAL_STATE__; // eslint-disable-line
 const history = createHistory();
 const store = configureStore(history, initialState);
 
@@ -20,7 +20,7 @@ const store = configureStore(history, initialState);
 const mountNode = document.getElementById('react-view');
 
 // Styles
-import styles from './styles/main.scss';
+import styles from './styles/main.scss'; // eslint-disable-line
 
 const renderApp = () => {
   const App = require('./app/app').default;

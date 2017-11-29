@@ -1,18 +1,18 @@
 {
-  "presets": ["env", "react", "stage-0"],
-  "plugins": ["syntax-dynamic-import", "transform-runtime"],
-  "env": {
-    "development": {
-      "plugins": [
-        "react-hot-loader/babel",
-        [
-          "transform-assets-import-to-string",
-          {
-            "baseUri": "http://localhost:3030",
-            "extensions": [".jpg", ".png", ".jpeg", ".gif", ".ico"]
-          }
-        ]
-      ]
-    }
-  }
+	"presets": ["env", "react", "stage-0"],
+	"plugins": ["syntax-dynamic-import", "transform-runtime"],
+	"env": {
+		"development": {
+			"plugins": [
+				"react-hot-loader/babel",
+				[
+					"transform-assets-import-to-string",
+					{
+						"baseUri": "http://localhost:3030",
+						"extensions": [".jpg", ".png", ".jpeg", ".gif", ".ico"]
+					}
+				]
+			]
+		}
+	}
 }
