@@ -4,10 +4,10 @@ import React, { Fragment } from 'react';
 // Helmet
 import Helmet from 'react-helmet';
 
-const HomePage = () => (
+const AboutPage = () => (
   <Fragment>
-    <Helmet title="Webpack Starter Kit - Landing Page" />,
-    <h1>Welcome to Webpack Starter Kit</h1>,
+    <Helmet title="About Us" />,
+    <h1>About Us</h1>,
     <article>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas
       enim semper, congue nisl eu, ullamcorper odio. Ut a massa fringilla,
@@ -23,4 +23,4 @@ const HomePage = () => (
   </Fragment>
 );
 
-export default { component: HomePage };
+export default { component: AboutPage };

@@ -10,10 +10,26 @@ const Navigation = () => (
       {[
         {
           route: '/',
-          label: 'Landing Page'
+          label: 'Home'
         },
         {
-          route: '/404',
+          route: '/about',
+          label: 'About Us'
+        },
+        {
+          route: '/services',
+          label: 'Services'
+        },
+        {
+          route: '/products',
+          label: 'Products'
+        },
+        {
+          route: '/contact',
+          label: 'Contact'
+        },
+        {
+          route: '/pageNotFound',
           label: '404 Page'
         }
       ].map(link => (

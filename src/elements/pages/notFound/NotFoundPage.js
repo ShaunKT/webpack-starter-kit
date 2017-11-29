@@ -1,25 +1,22 @@
 // React
-import React from 'react';
+import React, { Fragment } from 'react';
 
 // Helmet
 import Helmet from 'react-helmet';
 
 // Elements
-import { ErrorMsg } from '../../components/index';
+import { ErrorMessage } from '../../components/index';
 
-const NotFoundPage = () => {
-  return [
-    <Helmet
-      key="helmet_notFoundPage"
-      title="Page not found - 404 Error Page"
-    />,
-    <h1 key="h1_notFoundPage">Page not found - 404 Error</h1>,
-    <article key="article_notFoundPage">
-      <ErrorMsg />
+const NotFoundPage = () => (
+  <Fragment>
+    <Helmet title="Page not found - 404 Error Page" />,
+    <h1>Page not found - 404 Error</h1>,
+    <article>
+      <h4>Sorry your page was not found</h4>
+      <p>Would you like to return to: &nbsp;</p>
+      <ErrorMessage />
     </article>
-  ];
-};
+  </Fragment>
+);
 
-export default {
-  component: NotFoundPage
-};
+export default { component: NotFoundPage };
