@@ -1,50 +1,63 @@
 // React
 import React from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
+import { hydrate, unmountComponentAtNode } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
-// Redux
+// React Router
+import { BrowserRouter } from 'react-router-dom';
+
+// Axios
+import axios from 'axios';
+
+// Redux | Thunk
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import createHistory from 'history/createBrowserHistory';
-import { ConnectedRouter } from 'react-router-redux';
+import { createStore, applyMiddleware } from 'redux';
 
-// Store
-import configureStore from './store/store';
+// Reducers
+import reducers from './reducers/index';
 
-// Get initial state from server-side rendering
-const initialState = window.__INITIAL_STATE__; // eslint-disable-line
-const history = createHistory();
-const store = configureStore(history, initialState);
+// Create a custome axios instance
+const axiosInstance = axios.create({
+	baseURL: '/api'
+});
 
-// Id to mount react in html
-const mountNode = document.getElementById('react-view');
+// Create Store
+const store = createStore(
+	reducers,
+	window.INITIAL_STATE,
+	applyMiddleware(thunk.withExtraArgument(axiosInstance))
+);
 
 // Styles
 import styles from './styles/main.scss'; // eslint-disable-line
 
-const renderApp = () => {
-  const App = require('./app/app').default;
+// Id to mount react in html
+const mountNode = document.getElementById('react-view');
 
-  render(
-    <AppContainer>
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <App />
-        </ConnectedRouter>
-      </Provider>
-    </AppContainer>,
-    mountNode
-  );
+const renderApp = () => {
+	const App = require('./app/app').default;
+
+	hydrate(
+		<AppContainer>
+			<Provider store={store}>
+				<BrowserRouter>
+					<App />
+				</BrowserRouter>
+			</Provider>
+		</AppContainer>,
+		mountNode
+	);
 };
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./app/app', () => {
-    setImmediate(() => {
-      unmountComponentAtNode(mountNode);
-      renderApp();
-    });
-  });
+	module.hot.accept('./app/app', () => {
+		setImmediate(() => {
+			unmountComponentAtNode(mountNode);
+			renderApp();
+		});
+	});
 }
 
 renderApp();

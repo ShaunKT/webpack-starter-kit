@@ -21,22 +21,17 @@
     "react/jsx-filename-extension": [1, {
       "extensions": [".js", ".jsx"]
     }],
-    "valid-jsdoc": ["error", {
-      "requireReturn": true,
-      "requireReturnType": true,
-      "requireParamDescription": true,
-      "requireReturnDescription": true
-    }],
-    "require-jsdoc": ["error", {
-        "require": {
-            "FunctionDeclaration": true,
-            "MethodDefinition": true,
-            "ClassDeclaration": true
-        }
-    }],
     "react/forbid-prop-types": 0,
     "no-nested-ternary": 0,
     "comma-dangle": 0,
+    "react/require-default-props": 0,
+    "object-curly-newline": 0,
+    "arrow-parens": ["error", "as-needed"],
+    "indent": 0,
+    "no-shadow": 0,
+    "no-tabs": 0,
+    "react/jsx-indent": 0,
+    "react/jsx-indent-props": 0,
     "global-require": 0
   }
 }

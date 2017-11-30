@@ -3,23 +3,23 @@
 // --------------------------------
 
 #react-view {
-  display: block;
-  width: 100%;
-  @include clearfix();
+	display: block;
+	width: 100%;
+	@include clearfix();
 
-  display: flex;
-  display:flex;
-  flex-flow :row wrap;
-  align-items: stretch;
+	display: flex;
+	display: flex;
+	flex-flow: row wrap;
+	align-items: stretch;
 }
 
 .container {
-  display: block;
-  width: 100%;
-  @include clearfix();
+	display: block;
+	width: 100%;
+	@include clearfix();
 
-  .container--max-width {
-    max-width: 1366px;
-    margin: 0 auto;
-  }
+	.container--max-width {
+		max-width: 1366px;
+		margin: 0 auto;
+	}
 }
