@@ -1,6 +1,6 @@
 // React
 import React from 'react';
-import { hydrate, unmountComponentAtNode } from 'react-dom';
+import { hydrate } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 
 // React Router
@@ -53,10 +53,7 @@ const renderApp = () => {
 // Enable hot reload by react-hot-loader
 if (module.hot) {
 	module.hot.accept('./app/app', () => {
-		setImmediate(() => {
-			unmountComponentAtNode(mountNode);
-			renderApp();
-		});
+		renderApp();
 	});
 }
 

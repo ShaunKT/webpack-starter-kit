@@ -1,26 +1,50 @@
 // React
-import React, { Fragment } from 'react';
+import React, { Component } from 'react';
 
-// Helmet
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 
-const ContactPage = () => (
-  <Fragment>
-    <Helmet title="Contact Page" />,
-    <h1>Contact Page</h1>,
-    <article>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas
-      enim semper, congue nisl eu, ullamcorper odio. Ut a massa fringilla,
-      interdum orci non, sagittis ex. Donec diam nisi, hendrerit eu felis ac,
-      lacinia ullamcorper felis. Morbi ullamcorper tristique sodales. Curabitur
-      placerat dolor ut commodo auctor. Ut pretium nunc et lectus egestas
-      tempor. Aliquam eget tristique orci. Nam rhoncus vitae dui suscipit
-      ornare. Morbi egestas augue non ligula mattis fringilla. Cras placerat
-      quam id est efficitur, et sagittis mi pellentesque. Ut egestas ultricies
-      tincidunt. Etiam sed gravida nibh. Nam id ligula eget mi tincidunt
-      pulvinar nec non nisi.
-    </article>
-  </Fragment>
-);
+import { connect } from 'react-redux';
+import { fetchUsers } from '../../../actions/index';
 
-export default { component: ContactPage };
+class ContactPage extends Component {
+	componentDidMount() {
+		this.props.fetchUsers();
+	}
+
+	renderUsers() {
+		return this.props.users.map(user => <li key={user.id}>{user.name}</li>);
+	}
+
+	renderHeadContent() {
+		return (
+			<Helmet key="Helmet_">
+				<title>{`${this.props.users.length} Users loaded`}</title>
+				<meta property="og:title" content="Users List" />
+			</Helmet>
+		);
+	}
+
+	render() {
+		return (
+			<div key="UsersListContent_">
+				{this.renderHeadContent()}
+
+				<h2>Here is the list of Users:</h2>
+				<ul>{this.renderUsers()}</ul>
+			</div>
+		);
+	}
+}
+
+function mapStateToProps(state) {
+	return { users: state.users };
+}
+
+function loadData(store) {
+	return store.dispatch(fetchUsers());
+}
+
+export default {
+	loadData,
+	component: connect(mapStateToProps, { fetchUsers })(ContactPage)
+};
